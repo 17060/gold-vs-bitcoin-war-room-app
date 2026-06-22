@@ -647,9 +647,12 @@ function render(d){
     (eq.spy_chg!=null?'<span>Equities: SPY '+(eq.spy_chg>0?'+':'')+eq.spy_chg+'% · VIX '+eq.vix+' ('+eq.label+')</span>':'')+
     (ry.tip_chg!=null?'<span>Real yields: TIP '+(ry.tip_chg>0?'+':'')+ry.tip_chg+'% — '+ry.label+'</span>':'')+
     (rs?'<span>On past '+RNAME[r.code]+' days: BTC next-day avg '+(rs.btc_next_avg>0?'+':'')+rs.btc_next_avg+'% (n='+rs.n+')</span>':'');
-  // anomaly toast (z>=2)
-  if(d.anomaly&&d.anomaly.length&&_alertsPrimed)
-    d.anomaly.forEach(a=>toast('Anomaly',a[0]+' move is '+a[1]+'σ vs its 20d norm'));
+  // anomaly toast (z>=2) — only on a NEW anomaly, not every refresh
+  if(d.anomaly&&d.anomaly.length&&_alertsPrimed){
+    const fresh=d.anomaly.filter(a=>!_prevAnoms.has(a[0]));
+    if(fresh.length)fresh.forEach(a=>toast('Anomaly',a[0]+' move is '+a[1]+'σ vs its 20d norm'));
+  }
+  _prevAnoms=new Set((d.anomaly||[]).map(a=>a[0]));
 
   checkAlerts(d,r);
 }
@@ -710,7 +713,7 @@ function _drainToast(){const t=document.getElementById('toast');if(!_toastQ.leng
 // user-tunable alert config (session-scoped; seeded from data.alerts)
 let ALERT_CFG={peg_break_bps:25,big_move_pct:3.0,ratio_below:null};
 let DISCORD_WEBHOOK=null; // set via Discord connector at deploy; null = no webhook
-let _prevBroke=new Set(),_prevBig=new Set(),_prevRatio=false,_alertsPrimed=false;
+let _prevBroke=new Set(),_prevBig=new Set(),_prevRatio=false,_prevAnoms=new Set(),_alertsPrimed=false;
 function postDiscord(title,msg){ if(!DISCORD_WEBHOOK)return;
   try{fetch(DISCORD_WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:'**'+title+'** — '+msg})});}catch(e){} }
 function fire(title,msg,kind){toast(title,msg,kind);postDiscord(title,msg);}
