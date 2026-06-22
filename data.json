@@ -518,5 +518,49 @@
   "real_yield": {
     "tip_chg": 0.33,
     "label": "Easing \u2014 gold supportive"
-  }
+  },
+  "positioning": {
+    "liquidity": {
+      "bias": "Risk-on / hard assets",
+      "detail": "Signal favors BTC and gold together; dollar weakness is the tailwind. Watch DXY for a reversal.",
+      "favor": [
+        "BTC",
+        "Gold"
+      ],
+      "trim": [
+        "Cash"
+      ]
+    },
+    "store_of_value": {
+      "bias": "Gold over BTC",
+      "detail": "Debasement bid leads; gold outperforming BTC. Favor gold exposure, lighten high-beta crypto.",
+      "favor": [
+        "Gold"
+      ],
+      "trim": [
+        "BTC high-beta"
+      ]
+    },
+    "fear": {
+      "bias": "Defensive / cash",
+      "detail": "Risk-off; reduce leverage, raise cash, watch stablecoin pegs for funding stress.",
+      "favor": [
+        "Cash",
+        "Short-duration"
+      ],
+      "trim": [
+        "BTC",
+        "Risk assets"
+      ]
+    },
+    "neutral": {
+      "bias": "Stand aside",
+      "detail": "No directional edge; wait for a decisive break in BTC, gold, or the dollar.",
+      "favor": [
+        "Patience"
+      ],
+      "trim": []
+    }
+  },
+  "positioning_disclaimer": "Rules-based regime bias \u2014 educational, NOT investment advice. Size to your own goals and risk."
 }

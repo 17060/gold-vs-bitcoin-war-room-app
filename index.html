@@ -74,6 +74,15 @@
   .play{margin-top:10px;font-size:12px;color:var(--ink);background:var(--panel-2);border:1px solid var(--line);
     border-radius:8px;padding:8px 11px;position:relative;line-height:1.4}
   .play b{color:var(--faint);font-weight:600;font-size:10px;letter-spacing:.05em;text-transform:uppercase;display:block;margin-bottom:2px}
+  .posbias{margin-top:8px;font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px 11px;line-height:1.4}
+  .posbias .pb-h{display:flex;align-items:center;gap:8px;margin-bottom:3px}
+  .posbias .pb-lab{font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--faint)}
+  .posbias .pb-bias{font-size:12.5px;font-weight:600}
+  .posbias .pb-chips{display:inline-flex;gap:5px;flex-wrap:wrap;margin-top:5px}
+  .posbias .pb-fav{font-size:10px;font-weight:600;padding:2px 7px;border-radius:11px;background:rgba(61,220,151,.14);color:var(--up)}
+  .posbias .pb-trim{font-size:10px;font-weight:600;padding:2px 7px;border-radius:11px;background:rgba(255,92,108,.13);color:var(--down)}
+  .posbias .pb-detail{color:var(--muted);margin-top:5px}
+  .posbias .pb-disc{color:var(--faint);font-size:9.5px;margin-top:6px;font-style:italic}
   .mix{margin-top:9px;position:relative}
   .mixbar{display:flex;height:11px;border-radius:6px;overflow:hidden;background:var(--panel-2)}
   .mixbar span{display:block;height:100%;transition:width .6s cubic-bezier(.2,.7,.2,1)}
@@ -279,6 +288,7 @@
         </div>
       </div>
       <div class="play" id="playbook"><b>Playbook</b><span id="playtext"></span></div>
+      <div class="posbias" id="posbias"></div>
       <div class="mix">
         <div class="mixbar">
           <span id="mx-fear" style="background:var(--fear)"></span><span id="mx-liq" style="background:var(--liq)"></span><span id="mx-sov" style="background:var(--sov)"></span>
@@ -539,6 +549,17 @@ function render(d){
 
   // playbook + tripwires (computed live from the classifier, not hardcoded)
   document.getElementById('playtext').textContent=(d.playbook&&d.playbook[r.code])||'';
+  // positioning bias (educational, rules-based)
+  const pb=(d.positioning||{})[r.code];const pbEl=document.getElementById('posbias');
+  if(pb){const accent=ACCENT[r.code]||'var(--liq)';
+    const conf=(d.confidence&&d.confidence.label)||'';
+    pbEl.innerHTML='<div class="pb-h"><span class="pb-lab">Positioning bias</span>'+(conf?'<span class="pb-lab" style="color:'+accent+'">'+conf+' conviction</span>':'')+'</div>'+
+      '<div class="pb-bias" style="color:'+accent+'">'+pb.bias+'</div>'+
+      '<div class="pb-chips">'+(pb.favor||[]).map(f=>'<span class="pb-fav">▲ '+f+'</span>').join('')+(pb.trim||[]).map(t=>'<span class="pb-trim">▼ '+t+'</span>').join('')+'</div>'+
+      '<div class="pb-detail">'+pb.detail+'</div>'+
+      '<div class="pb-disc">'+(d.positioning_disclaimer||'Educational, not advice.')+'</div>';
+    pbEl.style.display='block';
+  } else pbEl.style.display='none';
   const tw=computeTripwires(d);
   document.getElementById('trips').innerHTML='<span class="trip" style="color:var(--faint)">Flips if →</span>'+
     (tw.length?tw.map(t=>'<span class="trip">'+t.cond+' <b>'+t.to+'</b></span>').join(''):'<span class="trip">No nearby flip — verdict is stable</span>');
