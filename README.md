@@ -3,6 +3,8 @@
 A single-screen regime dashboard that tells you, at a glance, whether the day is
 **Fear**, **Liquidity**, or **Store-of-Value** driven.
 
+**Live site:** https://17060.github.io/gold-vs-bitcoin-war-room-app/
+
 ## Files
 - `index.html` — the dashboard (static HTML/CSS/JS, no build step)
 - `data.json` — the live snapshot + regime read that the dashboard renders
