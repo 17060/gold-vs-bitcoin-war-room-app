@@ -49,6 +49,21 @@ stress pushes the read toward Fear regardless of price action.
 Verdict: **Liquidity / Store-of-Value** — dollar softening lifting hard assets,
 pegs intact, no funding stress.
 
+## Features
+- **Live-computed regime** verdict + mix bar (fear / liquidity / store-of-value).
+- **"Why this verdict"** expander — per-instrument contribution to the score.
+- **BTC/Gold ratio tile** (oz per BTC) with who's-leading tag + sparkline.
+- **Fear & Greed gauge** derived from BTC realized volatility.
+- **BTC–Gold correlation** readout (hourly-return correlation).
+- **Regime-today timeline** — intraday verdict per hour as a colored strip.
+- **Stablecoin peg board** — USDT, USDC, DAI + total tracked cap.
+- **Real sparklines** for BTC, gold, DXY (10Y omitted — stale Fri close).
+- **Data-aware LIVE badge** — shows PARTIAL + stale-feed count when any feed is old.
+- **Controls:** 1D/1W/1M timeframe, CSV export, light/dark toggle, manual refresh.
+- **Auto-refresh** every 2 min (re-fetches `data.json` and re-classifies).
+- **Alerts** (in-page toasts): regime flip, peg break (>25 bps), big move (>3%). Thresholds in `data.alerts`.
+
 ## Refresh
-Re-pull quotes + macro, regenerate `data.json`, redeploy. The dashboard reads
-`data.json` at load — no code changes needed to update the numbers.
+The page auto-refreshes `data.json` every 2 minutes. To update the underlying numbers,
+re-pull quotes + macro + hourly histories, regenerate `data.json`, and redeploy. A
+scheduled task can do this automatically — see the cron set up in the project thread.
