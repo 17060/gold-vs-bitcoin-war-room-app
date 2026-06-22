@@ -49,6 +49,18 @@ stress pushes the read toward Fear regardless of price action.
 Verdict: **Liquidity / Store-of-Value** — dollar softening lifting hard assets,
 pegs intact, no funding stress.
 
+## Intelligence + distribution (v4)
+- **Backtest hit-rate** badge — how often the regime call matched next-day direction over the trailing window.
+- **Regime-conditional stats** — average next-day BTC/gold return on past days of the current regime.
+- **Divergence flags** — auto-callout when signals conflict (e.g. Crypto F&G vs vol gauge).
+- **Anomaly z-scores** — toasts when a move is ≥2σ vs its 20-day norm.
+- **More inputs** — equity proxy (SPY/VIX), real yields (TIP), 4th stablecoin (FRAX).
+- **Scenario sandbox** — sliders for BTC/gold/DXY/10Y/peg that recompute the regime + mix live.
+- **Annotations/journal** — pin notes to dates; markers show on the 30-day calendar (session-scoped).
+- **Custom alert thresholds** — tune peg/big-move/ratio triggers in the UI.
+- **Discord webhook** — alerts post to a channel if `data.discord_webhook` is set.
+- **PWA** — installable (manifest + icons); **OG image** for link previews; **keyboard nav + ARIA** on tiles.
+
 ## Decision layer (v3)
 - **Playbook line** per regime — suggested posture.
 - **Confidence meter** — decisiveness from the top-two bucket gap + activity.

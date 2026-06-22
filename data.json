@@ -127,6 +127,16 @@
       "mcap_b": 4.23,
       "source": "https://www.perplexity.ai/finance/DAIUSD",
       "source_name": "Perplexity Finance \u00b7 DAI"
+    },
+    {
+      "id": "frax",
+      "label": "Frax",
+      "symbol": "FRAX",
+      "price": 0.9985,
+      "peg_dev_bps": -15.0,
+      "mcap_b": 0.65,
+      "source": "https://www.perplexity.ai/finance/FRAXUSD",
+      "source_name": "Perplexity Finance \u00b7 FRAX"
     }
   ],
   "macro": {
@@ -140,43 +150,43 @@
     {
       "name": "BTC",
       "verdict": "Risk-on",
-      "note": "Up today but \u221217.6% on the month",
+      "note": "Up today, \u221217.6% on month",
       "weight": "liquidity"
     },
     {
       "name": "Gold",
       "verdict": "Bid",
-      "note": "Hard-asset demand; leads BTC on 1M",
+      "note": "Real yields easing (TIP +0.33%)",
       "weight": "store_of_value"
     },
     {
       "name": "Dollar (DXY)",
       "verdict": "Weakening",
-      "note": "Soft today \u2014 tailwind for hard assets",
+      "note": "Soft \u2014 tailwind for hard assets",
       "weight": "liquidity"
     },
     {
-      "name": "Yield curve",
-      "verdict": "Normal",
-      "note": "10Y\u221213wk +0.79 \u2014 no inversion stress",
-      "weight": "calm"
+      "name": "Equities",
+      "verdict": "Risk-on",
+      "note": "SPY +0.78%, VIX 17.4 (calm)",
+      "weight": "liquidity"
     },
     {
       "name": "Crypto F&G",
       "verdict": "Extreme Fear",
-      "note": "Sentiment 20 vs moderate realized vol",
+      "note": "20 vs calm vol \u2014 divergence",
       "weight": "fear"
     },
     {
-      "name": "GLD flow",
-      "verdict": "Below avg",
-      "note": "0.87x avg volume \u2014 no panic gold bid",
+      "name": "Yield curve",
+      "verdict": "Normal",
+      "note": "10Y\u221213wk +0.79",
       "weight": "calm"
     },
     {
       "name": "Stablecoins",
       "verdict": "Intact",
-      "note": "USDT/USDC/DAI on peg \u2014 no funding stress",
+      "note": "USDT/USDC/DAI on peg; FRAX \u221215bps",
       "weight": "calm"
     }
   ],
@@ -250,7 +260,7 @@
       "r": "liquidity"
     }
   ],
-  "stable_total_b": 266.72,
+  "stable_total_b": 267.37,
   "alerts": {
     "peg_break_bps": 25,
     "big_move_pct": 3.0,
@@ -462,5 +472,51 @@
     "store_of_value": "Favor gold over BTC; debasement bid. Lighten high-beta risk if dollar firms.",
     "fear": "Defensive. Raise cash, trim leverage, watch stablecoin pegs for funding stress.",
     "neutral": "No edge. Stand aside or wait for a decisive break in BTC, gold, or the dollar."
+  },
+  "backtest": {
+    "hit_rate": 54.1,
+    "n": 74,
+    "window_days": 90
+  },
+  "regime_stats": {
+    "fear": {
+      "n": 26,
+      "btc_next_avg": -0.53,
+      "gold_next_avg": -0.07
+    },
+    "liquidity": {
+      "n": 25,
+      "btc_next_avg": -0.04,
+      "gold_next_avg": 0.33
+    },
+    "store_of_value": {
+      "n": 23,
+      "btc_next_avg": -0.25,
+      "gold_next_avg": -0.3
+    },
+    "neutral": {
+      "n": 15,
+      "btc_next_avg": 0.78,
+      "gold_next_avg": -0.37
+    }
+  },
+  "zscores": {
+    "btc": 0.76,
+    "gold": 0.48,
+    "dxy": -0.14
+  },
+  "anomaly": [],
+  "divergences": [
+    "Sentiment vs vol: Crypto F&G 20 (Extreme Fear) but vol gauge 64 \u2014 fear in sentiment, calm in realized vol"
+  ],
+  "equity": {
+    "spy_chg": 0.78,
+    "vix": 17.44,
+    "vix_chg": 3.93,
+    "label": "Calm"
+  },
+  "real_yield": {
+    "tip_chg": 0.33,
+    "label": "Easing \u2014 gold supportive"
   }
 }

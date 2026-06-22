@@ -4,7 +4,15 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Gold vs Bitcoin War Room</title>
-<meta name="description" content="One-screen regime read: fear, liquidity, or store-of-value — with playbook, confidence, and tripwires." />
+<meta name="description" content="One-screen regime read: fear, liquidity, or store-of-value — with playbook, confidence, tripwires, backtest, and scenario sandbox." />
+<meta property="og:title" content="Gold vs Bitcoin War Room" />
+<meta property="og:description" content="One screen: is today fear, liquidity, or store-of-value driven?" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#0a0d12" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="apple-touch-icon" href="icon-192.png" />
 <link rel="preconnect" href="https://api.fontshare.com" />
 <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&f[]=jetbrains-mono@400,500,700&display=swap" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -76,6 +84,13 @@
   .trips{margin-top:9px;display:flex;flex-wrap:wrap;gap:5px}
   .trip{font-size:10px;color:var(--muted);background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:3px 7px}
   .trip b{color:var(--ink);font-weight:600}
+  .diverge{margin-top:8px;font-size:11px;color:var(--sov);background:rgba(244,192,71,.10);border:1px solid rgba(244,192,71,.3);border-radius:7px;padding:6px 9px;display:none}
+  .diverge.show{display:block}
+  .diverge b{font-weight:600}
+  .xtra{margin-top:8px;font-size:10.5px;color:var(--muted);line-height:1.5}
+  .xtra span{display:block}
+  .btest{font-size:9.5px;font-weight:600;color:var(--up);background:rgba(61,220,151,.12);border-radius:10px;padding:2px 7px;text-transform:none;letter-spacing:0}
+  .btest.weak{color:var(--sov);background:rgba(244,192,71,.12)}
 
   /* context row: multi-tf + calendar + crypto F&G */
   .context{grid-column:1;grid-row:2;display:grid;grid-template-columns:1.05fr 1.25fr .9fr;gap:9px}
@@ -178,6 +193,25 @@
     font-size:11.5px;color:var(--muted);line-height:1.5;max-width:300px;box-shadow:0 8px 30px rgba(0,0,0,.4);z-index:45;display:none}
   #pop.show{display:block} #pop b{color:var(--ink)}
 
+  /* overlay panels (sandbox / journal / alerts) */
+  .modal{position:fixed;inset:0;z-index:46;display:none;align-items:center;justify-content:center;padding:20px}
+  .modal.open{display:flex}
+  .modal .mbg{position:absolute;inset:0;background:rgba(0,0,0,.5)}
+  .mbox{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;width:460px;max-width:94vw;max-height:88vh;overflow-y:auto;box-shadow:0 16px 50px rgba(0,0,0,.5)}
+  .mbox h3{font-size:16px;font-weight:600;margin-bottom:4px}
+  .mbox .msub{font-size:11px;color:var(--faint);margin-bottom:14px}
+  .mclose{position:absolute;top:14px;right:14px;background:var(--panel-2);border:1px solid var(--line);border-radius:7px;color:var(--muted);padding:4px 9px;cursor:pointer}
+  .sl{margin:11px 0}
+  .sl label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px}
+  .sl label b{font-family:'JetBrains Mono',monospace;color:var(--ink)}
+  .sl input[type=range]{width:100%;accent-color:var(--liq)}
+  .sbverdict{margin-top:14px;padding:12px;border-radius:10px;background:var(--panel-2);border:1px solid var(--line);text-align:center}
+  .sbverdict .vn{font-size:20px;font-weight:700}
+  .sbverdict .vm{font-size:11px;color:var(--muted);margin-top:4px}
+  .field{width:100%;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;color:var(--ink);padding:8px 10px;font:inherit;font-size:13px;margin-bottom:8px}
+  .jnote{display:flex;justify-content:space-between;gap:8px;font-size:12px;padding:8px 0;border-bottom:1px solid var(--line)}
+  .jnote button{background:none;border:none;color:var(--down);cursor:pointer;font-size:11px}
+  .btn{background:var(--liq);color:#04121c;border:none;border-radius:8px;padding:8px 14px;font:inherit;font-weight:600;font-size:12.5px;cursor:pointer}
   #toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--panel);
     border:1px solid var(--line);border-radius:10px;padding:10px 15px;font-size:12px;color:var(--ink);
     box-shadow:0 8px 30px rgba(0,0,0,.4);opacity:0;transition:.3s;z-index:50;max-width:90vw}
@@ -186,14 +220,18 @@
   #toast.fear{border-color:var(--fear)} #toast.ok{border-color:var(--up)}
 
   @media (max-width:1180px){
-    html,body{overflow:auto;height:auto}
-    .wrap{height:auto;min-height:100dvh}
+    html,body{overflow-y:auto;overflow-x:hidden;height:auto}
+    .wrap{height:auto;min-height:100dvh;overflow-x:hidden}
     .grid{display:flex;flex-direction:column}
     .verdict,.context,.assets,.right{grid-column:auto;grid-row:auto}
+    .context{display:grid;grid-template-columns:1fr;gap:9px}
+    .metrics3{grid-template-columns:1fr 1fr 1fr}
     .right{min-height:auto}.signals{flex:none}.sigtable{flex:none;overflow:visible}
     .vname{font-size:25px}.brand .sub{display:none}
     header{flex-wrap:wrap}.controls{flex-wrap:wrap;justify-content:flex-end}
     #drawer{width:100vw}
+    .mbox{width:94vw}
+    .cal{grid-template-columns:repeat(15,1fr)}
   }
 </style>
 </head>
@@ -210,6 +248,9 @@
     </div>
     <div class="controls">
       <div class="seg" id="tfseg"><button data-tf="1D" class="on">1D</button><button data-tf="1W">1W</button><button data-tf="1M">1M</button></div>
+      <button class="iconbtn" id="sandboxBtn" title="Scenario sandbox">⚗ What-if</button>
+      <button class="iconbtn" id="journalBtn" title="Annotations / journal">✎ Notes</button>
+      <button class="iconbtn" id="alertCfgBtn" title="Custom alert thresholds">⚑ Alerts</button>
       <button class="iconbtn" id="pngBtn" title="Snapshot PNG">PNG</button>
       <button class="iconbtn" id="exportBtn" title="Export CSV">CSV</button>
       <button class="iconbtn" id="themeBtn" title="Toggle theme">◐</button>
@@ -249,6 +290,7 @@
         </div>
       </div>
       <div class="trips" id="trips"></div>
+      <div class="diverge" id="diverge"></div>
     </section>
 
     <!-- CONTEXT ROW -->
@@ -267,6 +309,7 @@
           <svg width="50" height="50" viewBox="0 0 56 56" id="cfgGauge"></svg>
           <div><div class="big mono" id="cfgVal" style="font-size:20px">—</div><div class="gtext" id="cfgLabel"></div></div>
         </div>
+        <div class="xtra" id="xtraReads"></div>
       </div>
     </section>
 
@@ -296,7 +339,7 @@
       </section>
 
       <section class="panel signals">
-        <h2>Signal Board <span class="imark" id="methodMark" data-pop="Regime score weights: BTC & dollar direction (risk/liquidity), gold lead (store-of-value), peg stress & yields (fear). Normalized to 100. Peg break >25bps forces Fear.">i</span></h2>
+        <h2>Signal Board <span class="imark" id="methodMark" data-pop="Regime score weights: BTC & dollar direction (risk/liquidity), gold lead (store-of-value), peg stress & yields (fear). Normalized to 100. Peg break >25bps forces Fear.">i</span><span id="backtest" class="btest" data-pop="Backtested hit-rate: how often the regime call matched next-day direction (BTC up in Liquidity, down in Fear, gold leading in Store-of-Value) over the trailing window."></span></h2>
         <div class="sigtable" id="signals"></div>
       </section>
 
@@ -328,10 +371,57 @@
 <div id="scrim"></div>
 <div id="drawer"></div>
 <div id="pop"></div>
+
+<!-- Scenario sandbox -->
+<div class="modal" id="sandboxModal">
+  <div class="mbg" data-close></div>
+  <div class="mbox">
+    <button class="mclose" data-close>✕</button>
+    <h3>Scenario Sandbox</h3>
+    <div class="msub">Drag inputs to see how the regime and tripwires would change. Live data is untouched.</div>
+    <div class="sl"><label>BTC change <b id="sbBtcV"></b></label><input type="range" id="sbBtc" min="-12" max="12" step="0.1"></div>
+    <div class="sl"><label>Gold change <b id="sbGoldV"></b></label><input type="range" id="sbGold" min="-8" max="8" step="0.1"></div>
+    <div class="sl"><label>Dollar (DXY) change <b id="sbDxyV"></b></label><input type="range" id="sbDxy" min="-3" max="3" step="0.05"></div>
+    <div class="sl"><label>10Y change <b id="sbRatesV"></b></label><input type="range" id="sbRates" min="-1" max="1" step="0.01"></div>
+    <div class="sl"><label>Worst peg deviation (bps) <b id="sbPegV"></b></label><input type="range" id="sbPeg" min="0" max="200" step="1"></div>
+    <div class="sbverdict"><div class="vn" id="sbVerdict">—</div><div class="vm" id="sbMix"></div></div>
+    <div style="margin-top:10px;text-align:right"><button class="btn" id="sbReset">Reset to live</button></div>
+  </div>
+</div>
+
+<!-- Journal -->
+<div class="modal" id="journalModal">
+  <div class="mbg" data-close></div>
+  <div class="mbox">
+    <button class="mclose" data-close>✕</button>
+    <h3>Annotations</h3>
+    <div class="msub">Pin notes to dates (e.g. “FOMC”). They show on the calendar. Stored on this device.</div>
+    <input class="field" id="jDate" type="text" placeholder="Date (MM-DD)" />
+    <input class="field" id="jText" type="text" placeholder="Note" />
+    <div style="text-align:right;margin-bottom:12px"><button class="btn" id="jAdd">Add note</button></div>
+    <div id="jList"></div>
+  </div>
+</div>
+
+<!-- Alert thresholds -->
+<div class="modal" id="alertModal">
+  <div class="mbg" data-close></div>
+  <div class="mbox">
+    <button class="mclose" data-close>✕</button>
+    <h3>Custom Alert Thresholds</h3>
+    <div class="msub">Tune what triggers an in-page alert. Saved on this device.</div>
+    <div class="sl"><label>Peg-break threshold (bps) <b id="alPegV"></b></label><input type="range" id="alPeg" min="5" max="100" step="1"></div>
+    <div class="sl"><label>Big-move threshold (%) <b id="alMoveV"></b></label><input type="range" id="alMove" min="1" max="10" step="0.5"></div>
+    <div class="sl"><label>Custom: BTC/Gold ratio below <b id="alRatioV"></b></label><input type="range" id="alRatio" min="5" max="25" step="0.5"></div>
+    <div style="text-align:right;margin-top:8px"><button class="btn" id="alSave">Save</button></div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
 let DATA=null, prevRegimeCode=null, CURRENT_TF='1D';
+let NOTES={};  // {'MM-DD': 'note text'} — session-scoped (sandbox iframe blocks localStorage)
 const fmt=(n,d=2)=>(n==null||isNaN(n)?'—':n.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d}));
 function sparkPath(arr,w,h){const mn=Math.min(...arr),mx=Math.max(...arr),rg=(mx-mn)||1;
   return arr.map((v,i)=>{const x=(i/(arr.length-1))*w;const y=h-((v-mn)/rg)*(h-4)-2;return (i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1);}).join(' ');}
@@ -459,9 +549,11 @@ function render(d){
     return '<div class="mtfcell"><div class="tf">'+tf+'</div><div class="rg" style="color:'+(ACCENT[x.code]||'var(--muted)')+'">'+RNAME[x.code]+'</div></div>';
   }).join('');
 
-  // 30d calendar
-  document.getElementById('cal').innerHTML=(d.regime_calendar||[]).map(c=>
-    '<div class="calc tl-'+c.r+'" title="'+c.d+' · '+RNAME[c.r]+'"></div>').join('');
+  // 30d calendar (with annotation markers)
+  document.getElementById('cal').innerHTML=(d.regime_calendar||[]).map(c=>{
+    const note=NOTES[c.d];
+    return '<div class="calc tl-'+c.r+'" title="'+c.d+' · '+RNAME[c.r]+(note?' · 📌 '+note:'')+'">'+(note?'<span style="position:absolute;font-size:7px;margin:-1px 0 0 1px">•</span>':'')+'</div>';
+  }).join('');
 
   // crypto F&G (real)
   const cfg=d.crypto_fng||{value:50,label:'Neutral'};
@@ -537,6 +629,28 @@ function render(d){
   if(issues.length){sb.className='sanity show';sb.textContent='⚠ Data check: '+issues.join(' · ');}
   else sb.className='sanity';
 
+  // ---- intelligence layer ----
+  // backtest badge
+  const bt=d.backtest;
+  if(bt&&bt.hit_rate!=null){const el=document.getElementById('backtest');
+    el.textContent='Backtest '+bt.hit_rate+'% ('+bt.n+'d)';
+    el.className='btest'+(bt.hit_rate<55?' weak':'');}
+  // divergence flag
+  const dv=document.getElementById('diverge');
+  if(d.divergences&&d.divergences.length){dv.className='diverge show';
+    dv.innerHTML='<b>⚠ Divergence:</b> '+d.divergences.join(' · ');}
+  else dv.className='diverge';
+  // extra reads under crypto F&G: equity + real yields + regime-conditional stat
+  const xr=document.getElementById('xtraReads');const eq=d.equity||{},ry=d.real_yield||{};
+  const rs=(d.regime_stats||{})[r.code];
+  xr.innerHTML=
+    (eq.spy_chg!=null?'<span>Equities: SPY '+(eq.spy_chg>0?'+':'')+eq.spy_chg+'% · VIX '+eq.vix+' ('+eq.label+')</span>':'')+
+    (ry.tip_chg!=null?'<span>Real yields: TIP '+(ry.tip_chg>0?'+':'')+ry.tip_chg+'% — '+ry.label+'</span>':'')+
+    (rs?'<span>On past '+RNAME[r.code]+' days: BTC next-day avg '+(rs.btc_next_avg>0?'+':'')+rs.btc_next_avg+'% (n='+rs.n+')</span>':'');
+  // anomaly toast (z>=2)
+  if(d.anomaly&&d.anomaly.length&&_alertsPrimed)
+    d.anomaly.forEach(a=>toast('Anomaly',a[0]+' move is '+a[1]+'σ vs its 20d norm'));
+
   checkAlerts(d,r);
 }
 
@@ -593,18 +707,27 @@ function _drainToast(){const t=document.getElementById('toast');if(!_toastQ.leng
   _toastBusy=true;const{title,msg,kind}=_toastQ.shift();t.className='show '+(kind||'');
   t.innerHTML='<div class="ttitle">'+title+'</div><div>'+msg+'</div>';
   clearTimeout(t._h);t._h=setTimeout(()=>{t.className='';setTimeout(_drainToast,350);},3800);}
-let _prevBroke=new Set(),_prevBig=new Set(),_alertsPrimed=false;
+// user-tunable alert config (session-scoped; seeded from data.alerts)
+let ALERT_CFG={peg_break_bps:25,big_move_pct:3.0,ratio_below:null};
+let DISCORD_WEBHOOK=null; // set via Discord connector at deploy; null = no webhook
+let _prevBroke=new Set(),_prevBig=new Set(),_prevRatio=false,_alertsPrimed=false;
+function postDiscord(title,msg){ if(!DISCORD_WEBHOOK)return;
+  try{fetch(DISCORD_WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:'**'+title+'** — '+msg})});}catch(e){} }
+function fire(title,msg,kind){toast(title,msg,kind);postDiscord(title,msg);}
 function checkAlerts(d,r){
   if(!d.alerts||!d.alerts.enabled)return;
-  const broke=(d.stablecoins||[]).filter(s=>Math.abs(s.peg_dev_bps)>=d.alerts.peg_break_bps);
-  const big=(d.assets||[]).filter(a=>Math.abs(a.change_pct)>=d.alerts.big_move_pct);
+  const pegT=ALERT_CFG.peg_break_bps, moveT=ALERT_CFG.big_move_pct, ratioT=ALERT_CFG.ratio_below;
+  const broke=(d.stablecoins||[]).filter(s=>Math.abs(s.peg_dev_bps)>=pegT);
+  const big=(d.assets||[]).filter(a=>Math.abs(a.change_pct)>=moveT);
   const bSet=new Set(broke.map(s=>s.symbol)),gSet=new Set(big.map(a=>a.id));
+  const ratioHit=ratioT!=null && d.ratio && d.ratio.value<ratioT;
   if(_alertsPrimed){
-    if(prevRegimeCode&&prevRegimeCode!==r.code)toast('Regime flip','Now '+r.label,r.code==='fear'?'fear':'ok');
-    const nb=broke.filter(s=>!_prevBroke.has(s.symbol));if(nb.length)toast('Peg alert',nb.map(s=>s.symbol+' '+s.peg_dev_bps.toFixed(0)+'bps').join(', '),'fear');
-    const ng=big.filter(a=>!_prevBig.has(a.id));if(ng.length)toast('Big move',ng.map(a=>a.label+' '+(a.change_pct>0?'+':'')+a.change_pct.toFixed(2)+'%').join(', '));
+    if(prevRegimeCode&&prevRegimeCode!==r.code)fire('Regime flip','Now '+r.label,r.code==='fear'?'fear':'ok');
+    const nb=broke.filter(s=>!_prevBroke.has(s.symbol));if(nb.length)fire('Peg alert',nb.map(s=>s.symbol+' '+s.peg_dev_bps.toFixed(0)+'bps').join(', '),'fear');
+    const ng=big.filter(a=>!_prevBig.has(a.id));if(ng.length)fire('Big move',ng.map(a=>a.label+' '+(a.change_pct>0?'+':'')+a.change_pct.toFixed(2)+'%').join(', '));
+    if(ratioHit&&!_prevRatio)fire('Ratio alert','BTC/Gold '+d.ratio.value.toFixed(2)+' below your '+ratioT+' threshold');
   }
-  prevRegimeCode=r.code;_prevBroke=bSet;_prevBig=gSet;_alertsPrimed=true;
+  prevRegimeCode=r.code;_prevBroke=bSet;_prevBig=gSet;_prevRatio=ratioHit;_alertsPrimed=true;
 }
 
 // ---- exports ----
@@ -627,10 +750,73 @@ document.getElementById('refreshBtn').onclick=()=>load(true);
 document.getElementById('tfseg').addEventListener('click',e=>{if(e.target.tagName!=='BUTTON')return;
   [...e.currentTarget.children].forEach(b=>b.classList.remove('on'));e.target.classList.add('on');CURRENT_TF=e.target.dataset.tf;
   const x=(DATA.multi_timeframe||{})[CURRENT_TF];if(x)toast(CURRENT_TF+' regime',RNAME[x.code]+' · BTC '+(x.btc>0?'+':'')+x.btc+'% / Gold '+(x.gold>0?'+':'')+x.gold+'%');});
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDrawer();document.querySelectorAll('.modal.open').forEach(m=>m.classList.remove('open'));}});
+
+// ---- keyboard tile navigation (a11y) ----
+document.querySelectorAll('[data-drill]').forEach((el,i)=>{el.setAttribute('tabindex','0');el.setAttribute('role','button');
+  el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openDrawer(el.dataset.drill);}});});
+
+// ---- modal helpers ----
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(el){el.classList.remove('open');}
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>closeModal(b.closest('.modal')));
+
+// ---- scenario sandbox ----
+const sbIds=['Btc','Gold','Dxy','Rates','Peg'];
+function sbReadLive(){const g=id=>{const a=DATA.assets.find(x=>x.id===id);return a?a.change_pct:0;};
+  const worst=Math.max(...(DATA.stablecoins||[{peg_dev_bps:0}]).map(s=>Math.abs(s.peg_dev_bps)));
+  document.getElementById('sbBtc').value=g('btc');document.getElementById('sbGold').value=g('gold');
+  document.getElementById('sbDxy').value=g('dxy');document.getElementById('sbRates').value=g('rates');
+  document.getElementById('sbPeg').value=worst.toFixed(0);sbRender();}
+function sbRender(){
+  const v=id=>parseFloat(document.getElementById('sb'+id).value);
+  document.getElementById('sbBtcV').textContent=(v('Btc')>0?'+':'')+v('Btc').toFixed(1)+'%';
+  document.getElementById('sbGoldV').textContent=(v('Gold')>0?'+':'')+v('Gold').toFixed(1)+'%';
+  document.getElementById('sbDxyV').textContent=(v('Dxy')>0?'+':'')+v('Dxy').toFixed(2)+'%';
+  document.getElementById('sbRatesV').textContent=(v('Rates')>0?'+':'')+v('Rates').toFixed(2)+'%';
+  document.getElementById('sbPegV').textContent=v('Peg').toFixed(0)+' bps';
+  // build a synthetic data object and classify
+  const synth={assets:[{id:'btc',change_pct:v('Btc')},{id:'gold',change_pct:v('Gold')},{id:'dxy',change_pct:v('Dxy')},{id:'rates',change_pct:v('Rates')}],
+    stablecoins:[{peg_dev_bps:-v('Peg')}]};
+  const r=classifyRegime(synth);
+  document.getElementById('sbVerdict').textContent=r.label;
+  document.getElementById('sbVerdict').style.color=ACCENT[r.code]||'var(--liq)';
+  document.getElementById('sbMix').textContent='Fear '+r.score.fear+'% · Liquidity '+r.score.liquidity+'% · Store-of-Value '+r.score.store_of_value+'%';
+}
+sbIds.forEach(id=>{const el=document.getElementById('sb'+id);if(el)el.addEventListener('input',sbRender);});
+document.getElementById('sandboxBtn').onclick=()=>{sbReadLive();openModal('sandboxModal');};
+document.getElementById('sbReset').onclick=sbReadLive;
+
+// ---- journal ----
+function renderNotes(){const l=document.getElementById('jList');
+  const keys=Object.keys(NOTES);
+  l.innerHTML=keys.length?keys.sort().map(k=>'<div class="jnote"><span><b>'+k+'</b> '+NOTES[k]+'</span><button data-del="'+k+'">remove</button></div>').join(''):'<div style="color:var(--faint);font-size:12px">No notes yet.</div>';
+  l.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{delete NOTES[b.dataset.del];renderNotes();if(DATA)render(DATA);});}
+document.getElementById('journalBtn').onclick=()=>{renderNotes();openModal('journalModal');};
+document.getElementById('jAdd').onclick=()=>{const d=document.getElementById('jDate').value.trim(),t=document.getElementById('jText').value.trim();
+  if(!d||!t){toast('Note','Enter a date (MM-DD) and text');return;}NOTES[d]=t;document.getElementById('jDate').value='';document.getElementById('jText').value='';renderNotes();if(DATA)render(DATA);toast('Note pinned',d+' · '+t,'ok');};
+
+// ---- alert config ----
+function alSync(){document.getElementById('alPegV').textContent=document.getElementById('alPeg').value+' bps';
+  document.getElementById('alMoveV').textContent=document.getElementById('alMove').value+'%';
+  const rv=document.getElementById('alRatio').value;document.getElementById('alRatioV').textContent=rv;}
+['alPeg','alMove','alRatio'].forEach(id=>document.getElementById(id).addEventListener('input',alSync));
+document.getElementById('alertCfgBtn').onclick=()=>{
+  document.getElementById('alPeg').value=ALERT_CFG.peg_break_bps;
+  document.getElementById('alMove').value=ALERT_CFG.big_move_pct;
+  document.getElementById('alRatio').value=ALERT_CFG.ratio_below||15;
+  alSync();openModal('alertModal');};
+document.getElementById('alSave').onclick=()=>{
+  ALERT_CFG.peg_break_bps=parseFloat(document.getElementById('alPeg').value);
+  ALERT_CFG.big_move_pct=parseFloat(document.getElementById('alMove').value);
+  ALERT_CFG.ratio_below=parseFloat(document.getElementById('alRatio').value);
+  closeModal(document.getElementById('alertModal'));toast('Alerts saved','Peg '+ALERT_CFG.peg_break_bps+'bps · move '+ALERT_CFG.big_move_pct+'% · ratio<'+ALERT_CFG.ratio_below,'ok');};
 
 // ---- load + auto-refresh ----
-function load(manual){fetch('data.json?t='+Date.now()).then(r=>r.json()).then(d=>{render(d);if(manual)toast('Refreshed','Latest snapshot loaded','ok');})
+let _cfgSeeded=false;
+function load(manual){fetch('data.json?t='+Date.now()).then(r=>r.json()).then(d=>{
+    if(!_cfgSeeded&&d.alerts){ALERT_CFG.peg_break_bps=d.alerts.peg_break_bps;ALERT_CFG.big_move_pct=d.alerts.big_move_pct;if(d.discord_webhook)DISCORD_WEBHOOK=d.discord_webhook;_cfgSeeded=true;}
+    render(d);if(manual)toast('Refreshed','Latest snapshot loaded','ok');})
   .catch(e=>{document.getElementById('vname').textContent='Data load error';console.error(e);});}
 load();setInterval(load,120000);
 </script>
