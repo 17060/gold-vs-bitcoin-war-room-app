@@ -2,6 +2,23 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
+<script type="text/javascript">
+  // SPA fallback decoder (rafgraph/spa-github-pages variant).
+  // 404.html encodes the requested sub-path into the query (?/asset/btc).
+  // This app's only "routes" are overlay hashes, so we map a captured deep
+  // path to a hash overlay and normalize the URL back to the clean repo root
+  // — that keeps the relative data.json fetch working and lets restoreFromHash
+  // reopen the right overlay.
+  (function(l){
+    if (l.search[1] === '/') {
+      var path = l.search.slice(2).split('&')[0].replace(/~and~/g, '&').replace(/\/$/,'');
+      var base = l.pathname.replace(/\/$/,'') + '/';
+      var hash = l.hash;
+      if (path && !hash) { hash = '#' + path.replace(/\//g, '='); } // asset/btc -> #asset=btc
+      window.history.replaceState(null, null, base + hash);
+    }
+  })(window.location);
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Gold vs Bitcoin War Room</title>
 <meta name="description" content="One-screen regime read: fear, liquidity, or store-of-value — with playbook, confidence, tripwires, backtest, and scenario sandbox." />
@@ -29,6 +46,26 @@
   html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);
     font-family:'General Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;transition:background .25s,color .25s}
   .mono{font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums lining-nums}
+  /* a11y skip link */
+  .skip{position:absolute;left:-9999px;top:8px;z-index:60;background:var(--liq);color:#04121c;
+    padding:8px 14px;border-radius:8px;font-weight:600;font-size:13px;text-decoration:none}
+  .skip:focus{left:12px}
+  /* reading view (linear, scrollable text rendering for reader mode / SR / small screens) */
+  #readView{display:none}
+  body.reading{overflow-y:auto;overflow-x:hidden;height:auto}
+  body.reading .wrap{height:auto}
+  body.reading #main{display:none}
+  body.reading #readView{display:block;max-width:760px;margin:6px auto 30px;padding:4px 18px 24px;line-height:1.55}
+  #readView h2{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin:22px 0 8px}
+  #readView .rv-verdict{font-size:26px;font-weight:700;letter-spacing:-.02em;margin:6px 0 2px}
+  #readView .rv-tag{color:var(--muted);font-size:14px;margin-bottom:6px}
+  #readView p{font-size:14px;color:var(--ink);margin:6px 0}
+  #readView .rv-muted{color:var(--muted)}
+  #readView table{width:100%;border-collapse:collapse;font-size:13.5px;margin:4px 0}
+  #readView th,#readView td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
+  #readView th{color:var(--faint);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+  #readView td.num{font-family:'JetBrains Mono',monospace;text-align:right}
+  #readView a{color:var(--liq)}
   .wrap{height:100dvh;display:flex;flex-direction:column;padding:11px 15px;gap:9px;max-width:1640px;margin:0 auto}
   a{color:inherit}
 
@@ -245,6 +282,7 @@
 </style>
 </head>
 <body>
+<a href="#main" class="skip">Skip to dashboard</a>
 <div class="wrap">
   <header>
     <div class="brand">
@@ -255,8 +293,9 @@
       </svg>
       <div><h1>Gold vs Bitcoin War Room</h1><div class="sub" id="sessionTag">Fear · Liquidity · Store-of-Value</div></div>
     </div>
-    <div class="controls">
-      <div class="seg" id="tfseg"><button data-tf="1D" class="on">1D</button><button data-tf="1W">1W</button><button data-tf="1M">1M</button></div>
+    <nav class="controls" aria-label="Dashboard controls">
+      <div class="seg" id="tfseg" role="group" aria-label="Timeframe"><button data-tf="1D" class="on">1D</button><button data-tf="1W">1W</button><button data-tf="1M">1M</button></div>
+      <button class="iconbtn" id="readBtn" title="Reading view" aria-pressed="false">☰ Read</button>
       <button class="iconbtn" id="sandboxBtn" title="Scenario sandbox">⚗ What-if</button>
       <button class="iconbtn" id="journalBtn" title="Annotations / journal">✎ Notes</button>
       <button class="iconbtn" id="alertCfgBtn" title="Custom alert thresholds">⚑ Alerts</button>
@@ -265,12 +304,12 @@
       <button class="iconbtn" id="themeBtn" title="Toggle theme">◐</button>
       <button class="iconbtn" id="refreshBtn" title="Refresh">↻</button>
       <span class="live ok" id="liveBadge"><span class="dot"></span>LIVE</span>
-    </div>
+    </nav>
   </header>
 
   <div class="sanity" id="sanity"></div>
 
-  <div class="grid">
+  <main id="main" class="grid">
     <!-- VERDICT + DECISION LAYER -->
     <section class="panel verdict" id="verdict">
       <div class="glow" id="glow"></div>
@@ -370,7 +409,9 @@
         <div class="macro" id="macro"></div>
       </section>
     </div>
-  </div>
+  </main>
+
+  <article id="readView" aria-label="Reading view"></article>
 
   <div class="foot">
     <span>Change vs prior close · ratio oz/BTC · dollar-adj = move net of DXY · 10Y/curve Fri close. Snapshot, not advice.</span>
@@ -514,15 +555,43 @@ function sanityCheck(d){
   return issues;
 }
 
+// ---- data-age clock + honest LIVE/STALE gating ----
+// The green LIVE badge used to ignore wall-clock age. Now we parse as_of_utc,
+// show "updated Nm ago", and auto-degrade to STALE past a threshold so users
+// never trust hours-old numbers.
+let _asOfMs=null,_staleFeeds=0;
+const STALE_AFTER_MIN=15;   // dashboard feed should refresh well inside this
+function parseAsOf(s){ // "2026-06-22 10:03 UTC"
+  if(!s)return null;
+  const m=String(s).match(/(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/);
+  if(!m)return null;
+  return Date.UTC(+m[1],+m[2]-1,+m[3],+m[4],+m[5]);
+}
+function ageStr(ms){const min=Math.round(ms/60000);
+  if(min<1)return'just now';if(min<60)return min+'m ago';
+  const h=Math.floor(min/60);return h+'h '+(min%60)+'m ago';}
+function updateLiveBadge(){
+  const lb=document.getElementById('liveBadge');if(!lb)return;
+  const ageMs=_asOfMs!=null?Date.now()-_asOfMs:null;
+  const old=ageMs!=null&&ageMs>STALE_AFTER_MIN*60000;
+  const ageTxt=ageMs!=null?ageStr(ageMs):'';
+  if(old){lb.className='live partial';lb.title='Data is '+ageTxt+' — may be stale';
+    lb.innerHTML='<span class="dot"></span>STALE · '+ageTxt;}
+  else if(_staleFeeds>0){lb.className='live partial';lb.title=_staleFeeds+' feed(s) stale';
+    lb.innerHTML='<span class="dot"></span>PARTIAL · '+_staleFeeds+' stale'+(ageTxt?' · '+ageTxt:'');}
+  else{lb.className='live ok';lb.title='Updated '+ageTxt;
+    lb.innerHTML='<span class="dot"></span>LIVE'+(ageTxt?' · '+ageTxt:'');}
+}
+setInterval(updateLiveBadge,60000); // tick the age even between data refreshes
+
 function render(d){
   DATA=d;
   document.getElementById('footts').textContent=d.as_of_utc;
   if(d.session)document.getElementById('sessionTag').textContent='Session: '+d.session;
 
-  const stale=(d.assets||[]).filter(a=>a.stale).length;
-  const lb=document.getElementById('liveBadge');
-  if(stale>0){lb.className='live partial';lb.innerHTML='<span class="dot"></span>PARTIAL · '+stale+' stale';}
-  else{lb.className='live ok';lb.innerHTML='<span class="dot"></span>LIVE';}
+  _staleFeeds=(d.assets||[]).filter(a=>a.stale).length;
+  _asOfMs=parseAsOf(d.as_of_utc);
+  updateLiveBadge();
 
   const r=(d.regime&&d.regime.pinned)?d.regime:classifyRegime(d);d._regime=r;
   document.getElementById('vname').textContent=r.label;
@@ -676,6 +745,7 @@ function render(d){
   _prevAnoms=new Set((d.anomaly||[]).map(a=>a[0]));
 
   checkAlerts(d,r);
+  markDrillTiles();
 }
 
 // ---- drill-down ----
@@ -715,8 +785,49 @@ function openDrawer(key){
   document.getElementById('scrim').classList.add('open');
 }
 function closeDrawer(){document.getElementById('drawer').classList.remove('open');document.getElementById('scrim').classList.remove('open');}
-document.getElementById('scrim').onclick=closeDrawer;
-document.addEventListener('click',e=>{const el=e.target.closest('[data-drill]');if(el)openDrawer(el.dataset.drill);});
+document.getElementById('scrim').onclick=()=>history.state&&history.state.overlay?history.back():closeDrawer();
+document.addEventListener('click',e=>{const el=e.target.closest('[data-drill]');if(el)pushOverlay('drill:'+el.dataset.drill);});
+
+// ---- overlay history management (back button closes overlays instead of leaving the site) ----
+// Each opened overlay (drawer/modal) pushes a history entry tagged {overlay:<id>}.
+// popstate closes whatever is open. The hash mirrors the overlay so links/refresh restore it.
+function overlayHash(id){return '#'+id.replace(/:/g,'=');}
+function pushOverlay(id){
+  if(history.state&&history.state.overlay===id)return;
+  history.pushState({overlay:id},'',overlayHash(id));
+  applyOverlay(id);
+}
+function closeAllOverlays(){
+  closeDrawer();
+  document.querySelectorAll('.modal.open').forEach(m=>m.classList.remove('open'));
+}
+function applyOverlay(id){
+  closeAllOverlays();
+  if(!id)return;
+  if(id.startsWith('drill:')){openDrawer(id.slice(6));}
+  else if(id==='sandbox'){sbReadLive();document.getElementById('sandboxModal').classList.add('open');}
+  else if(id==='notes'){renderNotes();document.getElementById('journalModal').classList.add('open');}
+  else if(id==='alerts'){alertCfgOpen();document.getElementById('alertModal').classList.add('open');}
+}
+window.addEventListener('popstate',e=>{
+  applyOverlay(e.state&&e.state.overlay?e.state.overlay:null);
+});
+// Restore an overlay from the URL hash on first load (deep link / refresh).
+// Accepts both in-app hashes (#drill=asset=btc, #sandbox) and 404-mapped
+// path hashes (#asset=btc). Normalizes to a canonical overlay id.
+function hashToOverlay(h){
+  if(!h)return null;
+  let id=h.replace(/=/g,':');
+  // a bare "asset:<x>" from a /asset/<x> deep link -> drill
+  if(id.startsWith('asset:'))id='drill:'+id;
+  return id;
+}
+function restoreFromHash(){
+  const id=hashToOverlay(location.hash.slice(1));if(!id)return;
+  const canonicalHash=overlayHash(id);
+  history.replaceState({overlay:id},'',canonicalHash);
+  applyOverlay(id);
+}
 
 // ---- methodology / info popovers ----
 document.addEventListener('mouseover',e=>{const el=e.target.closest('[data-pop]');if(!el)return;
@@ -774,16 +885,25 @@ document.getElementById('refreshBtn').onclick=()=>load(true);
 document.getElementById('tfseg').addEventListener('click',e=>{if(e.target.tagName!=='BUTTON')return;
   [...e.currentTarget.children].forEach(b=>b.classList.remove('on'));e.target.classList.add('on');CURRENT_TF=e.target.dataset.tf;
   const x=(DATA.multi_timeframe||{})[CURRENT_TF];if(x)toast(CURRENT_TF+' regime',RNAME[x.code]+' · BTC '+(x.btc>0?'+':'')+x.btc+'% / Gold '+(x.gold>0?'+':'')+x.gold+'%');});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDrawer();document.querySelectorAll('.modal.open').forEach(m=>m.classList.remove('open'));}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){
+  if(document.body.classList.contains('reading')){toggleReading(false);return;}
+  if(history.state&&history.state.overlay)history.back();else closeAllOverlays();
+}});
 
 // ---- keyboard tile navigation (a11y) ----
-document.querySelectorAll('[data-drill]').forEach((el,i)=>{el.setAttribute('tabindex','0');el.setAttribute('role','button');
-  el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openDrawer(el.dataset.drill);}});});
+// Delegated so dynamically-rendered tiles (asset cards are built in render())
+// are keyboard-activatable too. Tiles get tabindex/role on each render pass.
+function markDrillTiles(){document.querySelectorAll('[data-drill]').forEach(el=>{
+  if(!el.hasAttribute('tabindex')){el.setAttribute('tabindex','0');el.setAttribute('role','button');}});}
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Enter'&&e.key!==' ')return;
+  const el=e.target.closest('[data-drill]');
+  if(el){e.preventDefault();pushOverlay('drill:'+el.dataset.drill);}
+});
 
-// ---- modal helpers ----
-function openModal(id){document.getElementById(id).classList.add('open');}
-function closeModal(el){el.classList.remove('open');}
-document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>closeModal(b.closest('.modal')));
+// ---- modal helpers (close routes through history so Back/Esc/✕ all agree) ----
+function closeOverlayUI(){if(history.state&&history.state.overlay)history.back();else closeAllOverlays();}
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeOverlayUI);
 
 // ---- scenario sandbox ----
 const sbIds=['Btc','Gold','Dxy','Rates','Peg'];
@@ -808,7 +928,7 @@ function sbRender(){
   document.getElementById('sbMix').textContent='Fear '+r.score.fear+'% · Liquidity '+r.score.liquidity+'% · Store-of-Value '+r.score.store_of_value+'%';
 }
 sbIds.forEach(id=>{const el=document.getElementById('sb'+id);if(el)el.addEventListener('input',sbRender);});
-document.getElementById('sandboxBtn').onclick=()=>{sbReadLive();openModal('sandboxModal');};
+document.getElementById('sandboxBtn').onclick=()=>pushOverlay('sandbox');
 document.getElementById('sbReset').onclick=sbReadLive;
 
 // ---- journal ----
@@ -816,7 +936,7 @@ function renderNotes(){const l=document.getElementById('jList');
   const keys=Object.keys(NOTES);
   l.innerHTML=keys.length?keys.sort().map(k=>'<div class="jnote"><span><b>'+k+'</b> '+NOTES[k]+'</span><button data-del="'+k+'">remove</button></div>').join(''):'<div style="color:var(--faint);font-size:12px">No notes yet.</div>';
   l.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{delete NOTES[b.dataset.del];renderNotes();if(DATA)render(DATA);});}
-document.getElementById('journalBtn').onclick=()=>{renderNotes();openModal('journalModal');};
+document.getElementById('journalBtn').onclick=()=>pushOverlay('notes');
 document.getElementById('jAdd').onclick=()=>{const d=document.getElementById('jDate').value.trim(),t=document.getElementById('jText').value.trim();
   if(!d||!t){toast('Note','Enter a date (MM-DD) and text');return;}NOTES[d]=t;document.getElementById('jDate').value='';document.getElementById('jText').value='';renderNotes();if(DATA)render(DATA);toast('Note pinned',d+' · '+t,'ok');};
 
@@ -825,23 +945,61 @@ function alSync(){document.getElementById('alPegV').textContent=document.getElem
   document.getElementById('alMoveV').textContent=document.getElementById('alMove').value+'%';
   const rv=document.getElementById('alRatio').value;document.getElementById('alRatioV').textContent=rv;}
 ['alPeg','alMove','alRatio'].forEach(id=>document.getElementById(id).addEventListener('input',alSync));
-document.getElementById('alertCfgBtn').onclick=()=>{
+function alertCfgOpen(){
   document.getElementById('alPeg').value=ALERT_CFG.peg_break_bps;
   document.getElementById('alMove').value=ALERT_CFG.big_move_pct;
   document.getElementById('alRatio').value=ALERT_CFG.ratio_below||15;
-  alSync();openModal('alertModal');};
+  alSync();}
+document.getElementById('alertCfgBtn').onclick=()=>pushOverlay('alerts');
 document.getElementById('alSave').onclick=()=>{
   ALERT_CFG.peg_break_bps=parseFloat(document.getElementById('alPeg').value);
   ALERT_CFG.big_move_pct=parseFloat(document.getElementById('alMove').value);
   ALERT_CFG.ratio_below=parseFloat(document.getElementById('alRatio').value);
-  closeModal(document.getElementById('alertModal'));toast('Alerts saved','Peg '+ALERT_CFG.peg_break_bps+'bps · move '+ALERT_CFG.big_move_pct+'% · ratio<'+ALERT_CFG.ratio_below,'ok');};
+  closeOverlayUI();toast('Alerts saved','Peg '+ALERT_CFG.peg_break_bps+'bps · move '+ALERT_CFG.big_move_pct+'% · ratio<'+ALERT_CFG.ratio_below,'ok');};
+
+// ---- reading view (linear text rendering for reader mode / screen readers / small screens) ----
+function renderReadView(d){
+  if(!d)return;const r=d._regime||classifyRegime(d);
+  const pct=v=>(v>0?'+':'')+fmt(v,2)+'%';
+  const assetRows=(d.assets||[]).map(a=>
+    '<tr><td>'+a.label+' <span class="rv-muted">('+a.symbol+')</span></td>'+
+    '<td class="num">'+a.unit+fmt(a.price,a.decimals)+(a.suffix||'')+'</td>'+
+    '<td class="num">'+pct(a.change_pct)+'</td>'+
+    '<td>'+(a.stale?'stale ('+a.asof+')':'live '+a.asof)+'</td></tr>').join('');
+  const sigRows=(d.signals||[]).map(s=>'<tr><td>'+s.name+'</td><td>'+s.verdict+'</td><td>'+s.note+'</td></tr>').join('');
+  const pegRows=(d.stablecoins||[]).map(s=>'<tr><td>'+s.symbol+'</td><td class="num">$'+fmt(s.price,4)+'</td><td class="num">'+(s.peg_dev_bps>0?'+':'')+fmt(s.peg_dev_bps,1)+' bps</td></tr>').join('');
+  const m=d.macro||{};
+  document.getElementById('readView').innerHTML=
+    '<h2>Today\u2019s driver</h2>'+
+    '<div class="rv-verdict" style="color:'+(ACCENT[r.code]||'var(--liq)')+'">'+r.label+'</div>'+
+    '<div class="rv-tag">'+r.tagline+'</div>'+
+    '<p class="rv-muted">As of '+(d.as_of_utc||'')+' · confidence '+((d.confidence||{}).value||'')+' ('+((d.confidence||{}).label||'')+') · mix: Fear '+r.score.fear+'% / Liquidity '+r.score.liquidity+'% / Store-of-Value '+r.score.store_of_value+'%.</p>'+
+    (d.playbook&&d.playbook[r.code]?'<h2>Playbook</h2><p>'+d.playbook[r.code]+'</p>':'')+
+    '<h2>Assets</h2><table><thead><tr><th>Asset</th><th>Price</th><th>Change</th><th>As of</th></tr></thead><tbody>'+assetRows+'</tbody></table>'+
+    '<h2>Signal board</h2><table><thead><tr><th>Signal</th><th>Read</th><th>Note</th></tr></thead><tbody>'+sigRows+'</tbody></table>'+
+    '<h2>Funding · pegs</h2><table><thead><tr><th>Coin</th><th>Price</th><th>Peg dev</th></tr></thead><tbody>'+pegRows+'</tbody></table>'+
+    '<h2>Macro backdrop</h2><p>Fed funds '+fmt(m.fed_funds,2)+'% · Core CPI '+fmt(m.core_cpi,1)+'% · Headline CPI '+fmt(m.headline_cpi,1)+'%.</p>'+
+    '<p class="rv-muted">Snapshot, not advice. <a href="./">Back to live dashboard</a></p>';
+}
+function toggleReading(on){
+  const want=(on==null)?!document.body.classList.contains('reading'):on;
+  document.body.classList.toggle('reading',want);
+  const btn=document.getElementById('readBtn');
+  btn.setAttribute('aria-pressed',String(want));
+  if(want){renderReadView(DATA);document.getElementById('readView').focus&&document.getElementById('readView').focus();}
+}
+document.getElementById('readBtn').onclick=()=>toggleReading();
 
 // ---- load + auto-refresh ----
 let _cfgSeeded=false;
 function load(manual){fetch('data.json?t='+Date.now()).then(r=>r.json()).then(d=>{
     if(!_cfgSeeded&&d.alerts){ALERT_CFG.peg_break_bps=d.alerts.peg_break_bps;ALERT_CFG.big_move_pct=d.alerts.big_move_pct;if(d.discord_webhook)DISCORD_WEBHOOK=d.discord_webhook;_cfgSeeded=true;}
-    render(d);if(manual)toast('Refreshed','Latest snapshot loaded','ok');})
+    render(d);
+    if(document.body.classList.contains('reading'))renderReadView(d);
+    if(!_restored){_restored=true;restoreFromHash();} // deep link/refresh once DATA exists
+    if(manual)toast('Refreshed','Latest snapshot loaded','ok');})
   .catch(e=>{document.getElementById('vname').textContent='Data load error';console.error(e);});}
+let _restored=false;
 load();setInterval(load,120000);
 </script>
 </body>
