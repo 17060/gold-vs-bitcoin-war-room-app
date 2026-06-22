@@ -61,10 +61,13 @@
   .card .nm{font-size:13px;font-weight:600}
   .card .sym{font-size:11px;color:var(--faint);font-weight:500;margin-top:2px}
   .card .px{font-size:27px;font-weight:600;letter-spacing:-.01em;margin-top:10px}
-  .card .row2{display:flex;align-items:flex-end;justify-content:space-between;margin-top:6px}
+  .card .row2{display:flex;align-items:center;gap:8px;justify-content:space-between;margin-top:6px}
   .delta{font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:4px}
   .delta.u{color:var(--up)} .delta.d{color:var(--down)} .delta.f{color:var(--flat)}
   .openline{font-size:11px;color:var(--faint)}
+  .tag{font-size:9.5px;font-weight:600;letter-spacing:.04em;color:var(--faint);background:var(--panel-2);
+    border:1px solid var(--line);border-radius:5px;padding:2px 6px;text-transform:uppercase;white-space:nowrap}
+  .tag.stale{color:var(--fear);border-color:rgba(255,138,61,.35);background:rgba(255,138,61,.10)}
   .spark{position:absolute;right:0;bottom:0;width:46%;height:42px;opacity:.7}
   .srclink{font-size:10.5px;color:var(--faint);text-decoration:none;margin-top:8px;display:inline-flex;align-items:center;gap:4px}
   .srclink:hover{color:var(--liq)}
@@ -179,13 +182,13 @@
   </div>
 
   <div class="foot">
-    <span>Data: Perplexity Finance (real-time quotes) · Fed / BLS (macro). Snapshot, not advice.</span>
+    <span>Change is vs prior close. Data: Perplexity Finance (quotes) · Fed / BLS (macro). 10Y is last Fri close. Snapshot, not advice.</span>
     <span id="footts"></span>
   </div>
 </div>
 
 <script>
-const fmt=(n,d=2)=>n.toLocaleString('en-US',{minimumFractionDigits:d,maxFractionDigits:d,maximumFractionDigits:d});
+const fmt=(n,d=2)=>n.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
 function sparkPath(arr,w,h){
   const mn=Math.min(...arr),mx=Math.max(...arr),rg=(mx-mn)||1;
   return arr.map((v,i)=>{const x=(i/(arr.length-1))*w;const y=h-((v-mn)/rg)*h;return (i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1);}).join(' ');
@@ -226,7 +229,8 @@ function render(d){
         '<div class="top"><div><div class="nm">'+a.label+'</div><div class="sym mono">'+a.symbol+'</div></div>'+
           '<div class="delta '+cls+' mono">'+arrow+' '+(a.change_pct>0?'+':'')+fmt(a.change_pct,2)+'%</div></div>'+
         '<div class="px mono">'+a.unit+fmt(a.price,a.decimals)+suffix+'</div>'+
-        '<div class="row2"><span class="openline mono">Open '+a.unit+fmt(a.open,a.decimals)+suffix+'</span></div>'+
+        '<div class="row2"><span class="openline mono">Prev close '+a.unit+fmt(a.prev_close,a.decimals)+suffix+'</span>'+
+          (a.asof?'<span class="tag'+(a.stale?' stale':'')+'">'+a.asof+'</span>':'')+'</div>'+
         '<a class="srclink" href="'+a.source+'" target="_blank" rel="noopener">'+a.source_name+' ↗</a>'+
         spark+
       '</div>');
