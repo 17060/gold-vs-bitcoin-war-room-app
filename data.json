@@ -457,24 +457,6 @@
     "flow_ratio": 0.87
   },
   "session": "London \u2192 NY pre-open",
-  "tripwires": [
-    {
-      "cond": "BTC falls below -0.6% (\u22122pt swing)",
-      "to": "Fear"
-    },
-    {
-      "cond": "Any stablecoin peg breaks >25 bps",
-      "to": "Fear \u00b7 Funding Stress"
-    },
-    {
-      "cond": "Gold extends lead over BTC by >1pt",
-      "to": "Store-of-Value"
-    },
-    {
-      "cond": "Dollar (DXY) turns positive on the day",
-      "to": "weakens Liquidity"
-    }
-  ],
   "playbook": {
     "liquidity": "Risk-on bias; hard assets favored. Watch the dollar for a reversal and respect the bearish 1W/1M trend.",
     "store_of_value": "Favor gold over BTC; debasement bid. Lighten high-beta risk if dollar firms.",

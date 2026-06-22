@@ -345,6 +345,32 @@ function arc(svg,val,col){ // 270deg gauge, val 0-100
 const ACCENT={fear:'var(--fear)',liquidity:'var(--liq)',store_of_value:'var(--sov)',neutral:'var(--neutral)'};
 const RNAME={fear:'Fear',liquidity:'Liquidity',store_of_value:'Store-of-Value',neutral:'Neutral'};
 
+// Live tripwires: probe the real classifier to find the actual flip point for each lever.
+function computeTripwires(d){
+  const base=classifyRegime(d).code;
+  const setAsset=(dd,id,v)=>{const a=dd.assets.find(x=>x.id===id);if(a)a.change_pct=v;};
+  const clone=()=>JSON.parse(JSON.stringify(d));
+  function sweepAsset(id,dir,limit,step){
+    const a=d.assets.find(x=>x.id===id);if(!a)return null;const cur=a.change_pct;
+    for(let v=cur+dir*step;dir<0?v>=limit:v<=limit;v=+(v+dir*step).toFixed(2)){
+      const dd=clone();setAsset(dd,id,v);const c=classifyRegime(dd).code;
+      if(c!==base)return{v:+v.toFixed(2),to:c};}
+    return null;
+  }
+  const out=[];
+  const fmtPct=v=>(v>0?'+':'')+v.toFixed(1)+'%';
+  const bd=sweepAsset('btc',-1,-12,0.1);
+  if(bd)out.push({cond:'BTC '+(bd.v>=0?'eases to '+fmtPct(bd.v):'falls to '+fmtPct(bd.v)),to:RNAME[bd.to]});
+  const gu=sweepAsset('gold',1,12,0.1);
+  if(gu)out.push({cond:'Gold rises to '+fmtPct(gu.v),to:RNAME[gu.to]});
+  const du=sweepAsset('dxy',1,4,0.05);
+  if(du)out.push({cond:'Dollar rises to '+fmtPct(du.v),to:RNAME[du.to]});
+  // peg break is a hard rule
+  const pd=clone();if(pd.stablecoins&&pd.stablecoins[0]){pd.stablecoins[0].peg_dev_bps=-25;
+    if(classifyRegime(pd).code==='fear')out.push({cond:'Any peg breaks >25 bps',to:'Fear · Funding Stress'});}
+  return out;
+}
+
 function classifyRegime(d){
   const get=id=>{const a=d.assets.find(x=>x.id===id);return a?a.change_pct:0;};
   const btc=get('btc'),gold=get('gold'),dxy=get('dxy'),rates=get('rates');
@@ -421,10 +447,11 @@ function render(d){
   document.getElementById('confval').style.color=cfcol;
   document.getElementById('streak').textContent=(d.streak_hrs?d.streak_hrs+'h in '+RNAME[r.code]:'');
 
-  // playbook + tripwires
+  // playbook + tripwires (computed live from the classifier, not hardcoded)
   document.getElementById('playtext').textContent=(d.playbook&&d.playbook[r.code])||'';
+  const tw=computeTripwires(d);
   document.getElementById('trips').innerHTML='<span class="trip" style="color:var(--faint)">Flips if →</span>'+
-    (d.tripwires||[]).map(t=>'<span class="trip">'+t.cond+' <b>'+t.to+'</b></span>').join('');
+    (tw.length?tw.map(t=>'<span class="trip">'+t.cond+' <b>'+t.to+'</b></span>').join(''):'<span class="trip">No nearby flip — verdict is stable</span>');
 
   // multi-timeframe
   document.getElementById('mtf').innerHTML=['1D','1W','1M'].map(tf=>{
