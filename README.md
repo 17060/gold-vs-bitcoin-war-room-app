@@ -49,6 +49,19 @@ stress pushes the read toward Fear regardless of price action.
 Verdict: **Liquidity / Store-of-Value** — dollar softening lifting hard assets,
 pegs intact, no funding stress.
 
+## Decision layer (v3)
+- **Playbook line** per regime — suggested posture.
+- **Confidence meter** — decisiveness from the top-two bucket gap + activity.
+- **Streak** — how long the current regime has held (from the intraday timeline).
+- **Tripwires** — live "what would flip it" thresholds.
+- **Multi-timeframe regime** — 1D / 1W / 1M verdicts side by side (daily closes).
+- **30-day regime calendar** — daily dominant-regime heatmap.
+- **Real Crypto Fear & Greed** (alternative.me) alongside the vol-derived gauge — divergence is a signal.
+- **Dollar-adjusted moves** — BTC/gold net of DXY.
+- **Yield curve** — 10Y minus 13-wk T-bill.
+- **GLD flow proxy** — volume vs average.
+- **Session tag**, **per-feed freshness dots**, **sanity banner** (flags non-reconciling data), **drill-down slide-over** per tile, **methodology popovers**, **PNG snapshot export**.
+
 ## Features
 - **Live-computed regime** verdict + mix bar (fear / liquidity / store-of-value).
 - **"Why this verdict"** expander — per-instrument contribution to the score.
