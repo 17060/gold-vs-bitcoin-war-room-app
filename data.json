@@ -57,10 +57,10 @@
       "symbol": "US10Y",
       "unit": "",
       "suffix": "%",
-      "price": 4.45,
-      "open": 4.45,
+      "price": 4.451,
+      "open": 4.463,
       "change_pct": -0.27,
-      "decimals": 2,
+      "decimals": 3,
       "source": "https://www.perplexity.ai/finance/%5ETNX",
       "source_name": "Perplexity Finance · US10Y",
       "spark": null
