@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Gold vs Bitcoin War Room</title>
+<meta name="description" content="One-screen regime read: is the day fear, liquidity, or store-of-value driven?" />
+<link rel="preconnect" href="https://api.fontshare.com" />
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&f[]=jetbrains-mono@400,500,700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0a0d12; --panel:#11161e; --panel-2:#161c26; --line:#222b38;
+    --ink:#e8edf4; --muted:#8b97a8; --faint:#5a6678;
+    --up:#3ddc97; --down:#ff5c6c; --flat:#8b97a8;
+    --fear:#ff8a3d; --liq:#33c5ff; --sov:#f4c047;
+    --r:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);
+    font-family:'General Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .mono{font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums lining-nums}
+  .wrap{height:100dvh;display:flex;flex-direction:column;padding:18px 22px;gap:14px;max-width:1480px;margin:0 auto}
+
+  /* header */
+  header{display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand h1{font-size:18px;font-weight:600;letter-spacing:-.01em}
+  .brand .sub{color:var(--faint);font-size:12px;font-weight:500}
+  .meta{display:flex;align-items:center;gap:18px;color:var(--muted);font-size:12.5px}
+  .live{display:flex;align-items:center;gap:7px;color:var(--up);font-weight:600}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--up);box-shadow:0 0 0 0 rgba(61,220,151,.6);animation:pulse 2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(61,220,151,.5)}70%{box-shadow:0 0 0 7px rgba(61,220,151,0)}100%{box-shadow:0 0 0 0 rgba(61,220,151,0)}}
+
+  /* main grid */
+  .grid{flex:1;display:grid;grid-template-columns:1.15fr 1fr;grid-template-rows:auto 1fr;gap:14px;min-height:0}
+
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+  .panel h2{font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--faint);margin-bottom:14px}
+
+  /* verdict hero */
+  .verdict{grid-column:1;grid-row:1;display:flex;flex-direction:column;justify-content:center;
+    position:relative;overflow:hidden}
+  .verdict .glow{position:absolute;inset:0;opacity:.16;background:radial-gradient(120% 140% at 0% 0%,var(--liq),transparent 60%)}
+  .verdict .vlabel{font-size:13px;color:var(--muted);font-weight:500;position:relative}
+  .verdict .vname{font-size:38px;font-weight:700;letter-spacing:-.02em;line-height:1.05;margin:6px 0 8px;position:relative}
+  .verdict .vtag{color:var(--muted);font-size:14px;max-width:46ch;position:relative}
+  /* regime mix bar */
+  .mix{margin-top:18px;position:relative}
+  .mixbar{display:flex;height:14px;border-radius:8px;overflow:hidden;background:var(--panel-2)}
+  .mixbar span{display:block;height:100%;transition:width .6s cubic-bezier(.2,.7,.2,1)}
+  .mixlabels{display:flex;justify-content:space-between;margin-top:9px;font-size:11.5px;color:var(--muted)}
+  .mixlabels b{font-family:'JetBrains Mono',monospace;color:var(--ink);font-weight:600}
+  .chip{display:inline-flex;align-items:center;gap:6px}
+  .sw{width:9px;height:9px;border-radius:2px;display:inline-block}
+
+  /* asset cards */
+  .assets{grid-column:1;grid-row:2;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:14px;min-height:0}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:15px 16px;
+    display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+  .card .top{display:flex;align-items:flex-start;justify-content:space-between}
+  .card .nm{font-size:13px;font-weight:600}
+  .card .sym{font-size:11px;color:var(--faint);font-weight:500;margin-top:2px}
+  .card .px{font-size:27px;font-weight:600;letter-spacing:-.01em;margin-top:10px}
+  .card .row2{display:flex;align-items:flex-end;justify-content:space-between;margin-top:6px}
+  .delta{font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:4px}
+  .delta.u{color:var(--up)} .delta.d{color:var(--down)} .delta.f{color:var(--flat)}
+  .openline{font-size:11px;color:var(--faint)}
+  .spark{position:absolute;right:0;bottom:0;width:46%;height:42px;opacity:.7}
+  .srclink{font-size:10.5px;color:var(--faint);text-decoration:none;margin-top:8px;display:inline-flex;align-items:center;gap:4px}
+  .srclink:hover{color:var(--liq)}
+
+  /* right column */
+  .right{grid-column:2;grid-row:1 / -1;display:flex;flex-direction:column;gap:14px;min-height:0}
+  .signals{flex:1;min-height:0;display:flex;flex-direction:column}
+  .sigtable{flex:1;overflow-y:auto;overscroll-behavior:contain;margin:-2px}
+  .sigrow{display:grid;grid-template-columns:118px 84px 1fr;gap:10px;align-items:center;
+    padding:11px 2px;border-bottom:1px solid var(--line)}
+  .sigrow:last-child{border-bottom:none}
+  .sigrow .snm{font-size:13px;font-weight:500}
+  .badge{font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;text-align:center;white-space:nowrap}
+  .b-liq{background:rgba(51,197,255,.14);color:var(--liq)}
+  .b-sov{background:rgba(244,192,71,.14);color:var(--sov)}
+  .b-calm{background:rgba(61,220,151,.14);color:var(--up)}
+  .b-fear{background:rgba(255,138,61,.14);color:var(--fear)}
+  .signote{font-size:12px;color:var(--muted)}
+
+  .stables{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .stab{background:var(--panel-2);border:1px solid var(--line);border-radius:11px;padding:13px 14px}
+  .stab .h{display:flex;justify-content:space-between;align-items:center}
+  .stab .nm{font-size:12.5px;font-weight:600}
+  .stab .peg{font-size:10.5px;font-weight:600;padding:2px 7px;border-radius:14px}
+  .peg.ok{background:rgba(61,220,151,.14);color:var(--up)}
+  .stab .px{font-size:21px;font-weight:600;margin-top:9px}
+  .stab .dev{font-size:11px;color:var(--muted);margin-top:3px}
+  .stab .mc{font-size:10.5px;color:var(--faint);margin-top:7px}
+
+  .macro{display:flex;gap:0;flex-shrink:0}
+  .mcell{flex:1;text-align:center;padding:2px 4px;border-right:1px solid var(--line)}
+  .mcell:last-child{border-right:none}
+  .mcell .v{font-size:19px;font-weight:600;font-family:'JetBrains Mono',monospace}
+  .mcell .k{font-size:10px;color:var(--faint);margin-top:3px;text-transform:uppercase;letter-spacing:.05em}
+
+  .foot{flex-shrink:0;display:flex;justify-content:space-between;align-items:center;color:var(--faint);font-size:11px}
+  .foot a{color:var(--muted);text-decoration:none}
+  .foot a:hover{color:var(--liq)}
+
+  @media (max-width:1080px){
+    html,body{overflow:auto;height:auto}
+    .wrap{height:auto;min-height:100dvh}
+    .grid{flex:none;display:flex;flex-direction:column;min-height:0}
+    .verdict,.assets,.right{grid-column:auto;grid-row:auto}
+    .right{min-height:auto}
+    .signals{flex:none}
+    .sigtable{flex:none;overflow:visible}
+    .verdict .vname{font-size:30px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <svg width="30" height="30" viewBox="0 0 32 32" fill="none" aria-label="War Room logo">
+        <circle cx="16" cy="16" r="15" stroke="#f4c047" stroke-width="1.4"/>
+        <path d="M16 4 L16 28" stroke="#222b38" stroke-width="1"/>
+        <circle cx="11" cy="13" r="5" fill="#f4c047"/>
+        <circle cx="21" cy="19" r="5" fill="#33c5ff"/>
+      </svg>
+      <div>
+        <h1>Gold vs Bitcoin War Room</h1>
+        <div class="sub">Fear · Liquidity · Store-of-Value — one screen</div>
+      </div>
+    </div>
+    <div class="meta">
+      <span id="asof"></span>
+      <span class="live"><span class="dot"></span>LIVE</span>
+    </div>
+  </header>
+
+  <div class="grid">
+    <!-- VERDICT -->
+    <section class="panel verdict" id="verdict">
+      <div class="glow" id="glow"></div>
+      <div class="vlabel">Today's driver</div>
+      <div class="vname" id="vname">—</div>
+      <div class="vtag" id="vtag"></div>
+      <div class="mix">
+        <div class="mixbar">
+          <span id="mx-fear" style="background:var(--fear)"></span>
+          <span id="mx-liq" style="background:var(--liq)"></span>
+          <span id="mx-sov" style="background:var(--sov)"></span>
+        </div>
+        <div class="mixlabels">
+          <span class="chip"><i class="sw" style="background:var(--fear)"></i>Fear <b id="l-fear"></b></span>
+          <span class="chip"><i class="sw" style="background:var(--liq)"></i>Liquidity <b id="l-liq"></b></span>
+          <span class="chip"><i class="sw" style="background:var(--sov)"></i>Store-of-Value <b id="l-sov"></b></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ASSET CARDS -->
+    <section class="assets" id="assets"></section>
+
+    <!-- RIGHT COLUMN -->
+    <div class="right">
+      <section class="panel signals">
+        <h2>Signal Board</h2>
+        <div class="sigtable" id="signals"></div>
+      </section>
+      <section class="panel" style="flex-shrink:0">
+        <h2>Funding Stress · Stablecoin Pegs</h2>
+        <div class="stables" id="stables"></div>
+      </section>
+      <section class="panel" style="flex-shrink:0">
+        <h2>Macro Backdrop</h2>
+        <div class="macro" id="macro"></div>
+      </section>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span>Data: Perplexity Finance (real-time quotes) · Fed / BLS (macro). Snapshot, not advice.</span>
+    <span id="footts"></span>
+  </div>
+</div>
+
+<script>
+const fmt=(n,d=2)=>n.toLocaleString('en-US',{minimumFractionDigits:d,maxFractionDigits:d,maximumFractionDigits:d});
+function sparkPath(arr,w,h){
+  const mn=Math.min(...arr),mx=Math.max(...arr),rg=(mx-mn)||1;
+  return arr.map((v,i)=>{const x=(i/(arr.length-1))*w;const y=h-((v-mn)/rg)*h;return (i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1);}).join(' ');
+}
+function render(d){
+  document.getElementById('asof').textContent='As of '+d.as_of_local;
+  document.getElementById('footts').textContent=d.as_of_utc;
+
+  // verdict
+  const r=d.regime;
+  document.getElementById('vname').textContent=r.label;
+  document.getElementById('vtag').textContent=r.tagline;
+  const accent={fear:'var(--fear)',liquidity:'var(--liq)','store_of_value':'var(--sov)','store-of-value':'var(--sov)'}[r.code]||'var(--liq)';
+  document.getElementById('glow').style.background='radial-gradient(120% 140% at 0% 0%,'+accent+',transparent 60%)';
+  document.getElementById('vname').style.color=accent;
+  const s=r.score;
+  document.getElementById('mx-fear').style.width=s.fear+'%';
+  document.getElementById('mx-liq').style.width=s.liquidity+'%';
+  document.getElementById('mx-sov').style.width=s.store_of_value+'%';
+  document.getElementById('l-fear').textContent=s.fear+'%';
+  document.getElementById('l-liq').textContent=s.liquidity+'%';
+  document.getElementById('l-sov').textContent=s.store_of_value+'%';
+
+  // asset cards
+  const ac=document.getElementById('assets');ac.innerHTML='';
+  d.assets.forEach(a=>{
+    const up=a.change_pct>0.02, dn=a.change_pct<-0.02;
+    const cls=up?'u':dn?'d':'f';
+    const arrow=up?'▲':dn?'▼':'■';
+    const suffix=a.suffix||'';
+    let spark='';
+    if(a.spark){
+      const col=up?'var(--up)':dn?'var(--down)':'var(--flat)';
+      spark='<svg class="spark" viewBox="0 0 160 42" preserveAspectRatio="none"><path d="'+sparkPath(a.spark,160,38)+'" fill="none" stroke="'+col+'" stroke-width="2"/></svg>';
+    }
+    ac.insertAdjacentHTML('beforeend',
+      '<div class="card">'+
+        '<div class="top"><div><div class="nm">'+a.label+'</div><div class="sym mono">'+a.symbol+'</div></div>'+
+          '<div class="delta '+cls+' mono">'+arrow+' '+(a.change_pct>0?'+':'')+fmt(a.change_pct,2)+'%</div></div>'+
+        '<div class="px mono">'+a.unit+fmt(a.price,a.decimals)+suffix+'</div>'+
+        '<div class="row2"><span class="openline mono">Open '+a.unit+fmt(a.open,a.decimals)+suffix+'</span></div>'+
+        '<a class="srclink" href="'+a.source+'" target="_blank" rel="noopener">'+a.source_name+' ↗</a>'+
+        spark+
+      '</div>');
+  });
+
+  // signals
+  const sg=document.getElementById('signals');sg.innerHTML='';
+  const bmap={liquidity:'b-liq',store_of_value:'b-sov',calm:'b-calm',fear:'b-fear'};
+  d.signals.forEach(x=>{
+    sg.insertAdjacentHTML('beforeend',
+      '<div class="sigrow"><div class="snm">'+x.name+'</div>'+
+      '<div class="badge '+(bmap[x.weight]||'b-liq')+'">'+x.verdict+'</div>'+
+      '<div class="signote">'+x.note+'</div></div>');
+  });
+
+  // stablecoins
+  const st=document.getElementById('stables');st.innerHTML='';
+  d.stablecoins.forEach(c=>{
+    const dev=c.peg_dev_bps;
+    const pegok=Math.abs(dev)<25;
+    st.insertAdjacentHTML('beforeend',
+      '<div class="stab"><div class="h"><span class="nm">'+c.label+' <span class="mono" style="color:var(--faint);font-weight:500">'+c.symbol+'</span></span>'+
+      '<span class="peg '+(pegok?'ok':'')+'">'+(pegok?'PEG OK':'OFF PEG')+'</span></div>'+
+      '<div class="px mono">$'+fmt(c.price,4)+'</div>'+
+      '<div class="dev mono">'+(dev>0?'+':'')+fmt(dev,1)+' bps vs $1.00</div>'+
+      '<div class="mc mono">Mkt cap $'+fmt(c.mcap_b,1)+'B</div></div>');
+  });
+
+  // macro
+  const m=d.macro;const mc=document.getElementById('macro');
+  mc.innerHTML=
+    '<div class="mcell"><div class="v">'+fmt(m.fed_funds,2)+'%</div><div class="k">Fed Funds</div></div>'+
+    '<div class="mcell"><div class="v">'+fmt(m.core_cpi,1)+'%</div><div class="k">Core CPI</div></div>'+
+    '<div class="mcell"><div class="v">'+fmt(m.headline_cpi,1)+'%</div><div class="k">Headline CPI</div></div>';
+}
+fetch('data.json').then(r=>r.json()).then(render).catch(e=>{
+  document.getElementById('vname').textContent='Data load error';
+  console.error(e);
+});
+</script>
+</body>
+</html>

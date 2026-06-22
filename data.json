@@ -1,0 +1,105 @@
+{
+  "as_of_utc": "2026-06-22 10:03 UTC",
+  "as_of_local": "Jun 22, 2026 · 6:03 AM EDT",
+  "regime": {
+    "label": "Liquidity / Store-of-Value",
+    "code": "liquidity",
+    "tagline": "Dollar softening is lifting hard assets. No stress in funding.",
+    "score": {
+      "fear": 8,
+      "liquidity": 64,
+      "store_of_value": 28
+    }
+  },
+  "assets": [
+    {
+      "id": "btc",
+      "label": "Bitcoin",
+      "symbol": "BTC",
+      "unit": "$",
+      "price": 64104.98,
+      "open": 63242.26,
+      "change_pct": 1.36,
+      "decimals": 0,
+      "source": "https://www.perplexity.ai/finance/BTCUSD",
+      "source_name": "Perplexity Finance · BTCUSD",
+      "spark": [63918.03,64012.15,64157.13,64164.81,64036.38,63940,64181.38,64131.40,64114.19,64089.59,64041.83,64070.41,64058.89]
+    },
+    {
+      "id": "gold",
+      "label": "Gold",
+      "symbol": "XAU/USD",
+      "unit": "$",
+      "price": 4208.86,
+      "open": 4157.10,
+      "change_pct": 1.29,
+      "decimals": 2,
+      "source": "https://www.perplexity.ai/finance/XAUUSD",
+      "source_name": "Perplexity Finance · XAU/USD",
+      "spark": [4176.71,4182.08,4193.49,4193.80,4196.24,4197.56,4197.66,4190.50,4191.56,4197.28,4204.16,4208.23,4208.59]
+    },
+    {
+      "id": "dxy",
+      "label": "Dollar Index",
+      "symbol": "DXY",
+      "unit": "",
+      "price": 100.67,
+      "open": 100.84,
+      "change_pct": -0.18,
+      "decimals": 2,
+      "source": "https://www.perplexity.ai/finance/DX-Y.NYB",
+      "source_name": "Perplexity Finance · DXY",
+      "spark": null
+    },
+    {
+      "id": "rates",
+      "label": "10Y Treasury",
+      "symbol": "US10Y",
+      "unit": "",
+      "suffix": "%",
+      "price": 4.45,
+      "open": 4.45,
+      "change_pct": -0.27,
+      "decimals": 2,
+      "source": "https://www.perplexity.ai/finance/%5ETNX",
+      "source_name": "Perplexity Finance · US10Y",
+      "spark": null
+    }
+  ],
+  "stablecoins": [
+    {
+      "id": "usdt",
+      "label": "Tether",
+      "symbol": "USDT",
+      "price": 0.9989,
+      "peg_dev_bps": -11.1,
+      "mcap_b": 186.89,
+      "source": "https://www.perplexity.ai/finance/USDTUSD",
+      "source_name": "Perplexity Finance · USDT"
+    },
+    {
+      "id": "usdc",
+      "label": "USD Coin",
+      "symbol": "USDC",
+      "price": 0.9998,
+      "peg_dev_bps": -2.0,
+      "mcap_b": 75.60,
+      "source": "https://www.perplexity.ai/finance/USDCUSD",
+      "source_name": "Perplexity Finance · USDC"
+    }
+  ],
+  "macro": {
+    "fed_funds": 3.75,
+    "core_cpi": 2.9,
+    "headline_cpi": 4.2,
+    "source": "https://tradingeconomics.com/united-states/interest-rate",
+    "source_name": "Federal Reserve / BLS"
+  },
+  "signals": [
+    {"name": "BTC", "verdict": "Risk-on", "note": "Up with gold, dollar soft", "weight": "liquidity"},
+    {"name": "Gold", "verdict": "Bid", "note": "Hard-asset demand intact", "weight": "store_of_value"},
+    {"name": "Dollar (DXY)", "verdict": "Weakening", "note": "Down on the day, tailwind for BTC + gold", "weight": "liquidity"},
+    {"name": "10Y Rates", "verdict": "Easing", "note": "Yields drifting lower, supportive of duration + risk", "weight": "liquidity"},
+    {"name": "Stablecoin pegs", "verdict": "Intact", "note": "USDT/USDC within a few bps of $1.00 — no funding stress", "weight": "calm"}
+  ]
+}
