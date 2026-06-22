@@ -367,17 +367,21 @@ function render(d){
   if(rt.spark){document.getElementById('ratioSpark').innerHTML='<path d="'+sparkPath(rt.spark,160,38)+'" fill="none" stroke="'+(rt.chg_pct>=0?'var(--liq)':'var(--sov)')+'" stroke-width="2"/>';}
 
   // ---- metrics: fear&greed gauge ----
-  const fg=d.fear_greed||50;
-  const ang=(fg/100)*270-135; // -135..135
-  const cx=28,cy=28,rr=22;
+  const fg=Math.max(0,Math.min(100,d.fear_greed==null?50:d.fear_greed));
+  const cx=28,cy=28,rr=22, SWEEP=270;
+  const pol=a=>[cx+rr*Math.cos(a),cy+rr*Math.sin(a)];
   const a0=(-225)*Math.PI/180, a1=(45)*Math.PI/180;
-  function pol(a){return [cx+rr*Math.cos(a),cy+rr*Math.sin(a)];}
   const arcBg=`M${pol(a0)} A${rr} ${rr} 0 1 1 ${pol(a1)}`;
-  const aV=(-225+ (fg/100)*270)*Math.PI/180;
+  const sweepDeg=(fg/100)*SWEEP;
+  const aV=(-225+sweepDeg)*Math.PI/180;
+  const largeArc=sweepDeg>180?1:0;            // based on actual swept angle
   const fgcol=fg>=66?'var(--up)':fg>=40?'var(--sov)':'var(--fear)';
+  let valArc='';
+  if(sweepDeg>0.5){                            // avoid degenerate zero-length arc
+    valArc=`<path d="M${pol(a0)} A${rr} ${rr} 0 ${largeArc} 1 ${pol(aV)}" fill="none" stroke="${fgcol}" stroke-width="5" stroke-linecap="round"/>`;
+  }
   document.getElementById('fgGauge').innerHTML=
-    `<path d="${arcBg}" fill="none" stroke="var(--line)" stroke-width="5" stroke-linecap="round"/>`+
-    `<path d="M${pol(a0)} A${rr} ${rr} 0 ${fg>50?1:0} 1 ${pol(aV)}" fill="none" stroke="${fgcol}" stroke-width="5" stroke-linecap="round"/>`;
+    `<path d="${arcBg}" fill="none" stroke="var(--line)" stroke-width="5" stroke-linecap="round"/>`+valArc;
   document.getElementById('fgVal').textContent=fg;
   document.getElementById('fgVal').style.color=fgcol;
   document.getElementById('fgLabel').textContent=fg>=75?'Greed':fg>=55?'Mild greed':fg>=45?'Neutral':fg>=25?'Mild fear':'Fear';
@@ -438,21 +442,33 @@ function render(d){
   checkAlerts(d,r);
 }
 
-// ---- alerts ----
-function toast(title,msg,kind){const t=document.getElementById('toast');t.className='show '+(kind||'');
+// ---- alerts (queued so stacked alerts each display) ----
+let _toastQ=[],_toastBusy=false;
+function toast(title,msg,kind){_toastQ.push({title,msg,kind});if(!_toastBusy)_drainToast();}
+function _drainToast(){
+  const t=document.getElementById('toast');
+  if(!_toastQ.length){_toastBusy=false;t.className='';return;}
+  _toastBusy=true;
+  const {title,msg,kind}=_toastQ.shift();
+  t.className='show '+(kind||'');
   t.innerHTML='<div class="ttitle">'+title+'</div><div>'+msg+'</div>';
-  clearTimeout(t._h);t._h=setTimeout(()=>t.className='',6000);}
+  clearTimeout(t._h);t._h=setTimeout(()=>{t.className='';setTimeout(_drainToast,350);},3800);
+}
+let _prevBroke=new Set(), _prevBig=new Set(), _alertsPrimed=false;
 function checkAlerts(d,r){
   if(!d.alerts||!d.alerts.enabled)return;
-  // regime flip
-  if(prevRegimeCode&&prevRegimeCode!==r.code){toast('Regime flip','Now '+r.label,r.code==='fear'?'fear':'ok');}
-  prevRegimeCode=r.code;
-  // peg break
   const broke=(d.stablecoins||[]).filter(s=>Math.abs(s.peg_dev_bps)>=d.alerts.peg_break_bps);
-  if(broke.length)toast('Peg alert',broke.map(s=>s.symbol+' '+s.peg_dev_bps.toFixed(0)+'bps').join(', '),'fear');
-  // big move
   const big=(d.assets||[]).filter(a=>Math.abs(a.change_pct)>=d.alerts.big_move_pct);
-  if(big.length)toast('Big move',big.map(a=>a.label+' '+(a.change_pct>0?'+':'')+a.change_pct.toFixed(2)+'%').join(', '));
+  const brokeSet=new Set(broke.map(s=>s.symbol)), bigSet=new Set(big.map(a=>a.id));
+  // First render only primes baseline state — no toasts for pre-existing conditions.
+  if(_alertsPrimed){
+    if(prevRegimeCode&&prevRegimeCode!==r.code) toast('Regime flip','Now '+r.label,r.code==='fear'?'fear':'ok');
+    const newBreaks=broke.filter(s=>!_prevBroke.has(s.symbol));
+    if(newBreaks.length) toast('Peg alert',newBreaks.map(s=>s.symbol+' '+s.peg_dev_bps.toFixed(0)+'bps').join(', '),'fear');
+    const newBig=big.filter(a=>!_prevBig.has(a.id));
+    if(newBig.length) toast('Big move',newBig.map(a=>a.label+' '+(a.change_pct>0?'+':'')+a.change_pct.toFixed(2)+'%').join(', '));
+  }
+  prevRegimeCode=r.code; _prevBroke=brokeSet; _prevBig=bigSet; _alertsPrimed=true;
 }
 
 // ---- export CSV ----
