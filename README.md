@@ -24,8 +24,16 @@ plus an intraday sparkline where available.
 Macro backdrop (Fed funds, core CPI, headline CPI) comes from Fed / BLS via the
 macro snapshot.
 
-## Regime logic
-Each instrument votes into one of three buckets. The verdict is the dominant bucket.
+## Regime logic (computed live)
+The verdict is **derived in-page** by `classifyRegime()` in `index.html` from the live
+`change_pct` of BTC, gold, DXY, and 10Y plus the stablecoin peg deviations — it is NOT
+hardcoded, so it updates whenever `data.json` changes. Each instrument votes into one of
+three buckets; scores are normalized to 100 and the dominant bucket wins (blended label
+when the top two are within 12 points). A near-flat tape returns "Mixed / Neutral", and any
+peg break (>25 bps) forces "Fear · Funding Stress".
+
+To pin a manual verdict, add a `regime` object to `data.json` with `pinned: true` plus
+`label`, `code`, `tagline`, and `score`.
 
 - **Fear** — BTC down hard, gold bid, dollar up, yields up, and/or stablecoins
   off peg (>25 bps). Flight to cash/quality.

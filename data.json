@@ -1,16 +1,7 @@
 {
   "as_of_utc": "2026-06-22 10:03 UTC",
   "as_of_local": "Jun 22, 2026 · 6:03 AM EDT",
-  "regime": {
-    "label": "Liquidity / Store-of-Value",
-    "code": "liquidity",
-    "tagline": "Dollar softening is lifting hard assets. No stress in funding.",
-    "score": {
-      "fear": 8,
-      "liquidity": 64,
-      "store_of_value": 28
-    }
-  },
+  "_regime_note": "Regime is computed live in-page by classifyRegime(). To pin a manual override, add a 'regime' object with pinned:true, label, code, tagline, and score.",
   "assets": [
     {
       "id": "btc",
