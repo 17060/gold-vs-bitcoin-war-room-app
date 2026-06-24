@@ -1,6 +1,6 @@
 {
-  "as_of_utc": "2026-06-24 13:38 UTC",
-  "as_of_local": "Jun 24, 2026 \u00b7 9:38 AM EDT",
+  "as_of_utc": "2026-06-24 16:38 UTC",
+  "as_of_local": "Jun 24, 2026 \u00b7 12:38 PM EDT",
   "_regime_note": "Regime is computed live in-page by classifyRegime(). To pin a manual override, add a 'regime' object with pinned:true, label, code, tagline, and score.",
   "assets": [
     {
@@ -8,27 +8,27 @@
       "label": "Bitcoin",
       "symbol": "BTC",
       "unit": "$",
-      "price": 61843.68,
+      "price": 60348.0,
       "prev_close": 62660.11,
-      "change_pct": -1.3,
+      "change_pct": -3.69,
       "decimals": 0,
-      "asof": "13:38 UTC",
+      "asof": "16:38 UTC",
       "source": "https://www.perplexity.ai/finance/BTCUSD",
       "source_name": "Perplexity Finance \u00b7 BTCUSD",
       "spark": [
         62504.19,
         62645,
-        62801.99,
-        62691.83,
+        62758.76,
         62587.68,
         62609.68,
         62594.39,
-        62594.41,
-        62355.59,
-        62288.18,
-        62734.37,
+        62448.77,
+        62823.17,
         62526.54,
-        61897.41
+        61227.68,
+        61017.98,
+        60176.73,
+        60438.22
       ]
     },
     {
@@ -36,27 +36,27 @@
       "label": "Gold",
       "symbol": "XAU/USD",
       "unit": "$",
-      "price": 3997.07,
+      "price": 4020.57,
       "prev_close": 4110.74,
-      "change_pct": -2.77,
+      "change_pct": -2.19,
       "decimals": 2,
-      "asof": "13:38 UTC",
+      "asof": "16:38 UTC",
       "source": "https://www.perplexity.ai/finance/XAUUSD",
       "source_name": "Perplexity Finance \u00b7 XAU/USD",
       "spark": [
         4063.29,
         4073.45,
-        4075.93,
-        4087.18,
+        4087.97,
         4084.57,
         4080.55,
         4069.16,
-        4065.14,
-        4055.8,
-        4044.14,
-        4015.59,
+        4061.01,
+        4045.78,
         3988.01,
-        3993.06
+        4037.89,
+        4007.99,
+        4002.68,
+        4019.45
       ]
     },
     {
@@ -64,21 +64,21 @@
       "label": "Dollar Index",
       "symbol": "DXY",
       "unit": "",
-      "price": 101.47,
+      "price": 101.28,
       "prev_close": 101.02,
-      "change_pct": 0.44,
+      "change_pct": 0.25,
       "decimals": 2,
-      "asof": "13:38 UTC",
+      "asof": "16:38 UTC",
       "source": "https://www.perplexity.ai/finance/DX-Y.NYB",
       "source_name": "Perplexity Finance \u00b7 DXY",
       "spark": [
-        100.73,
         100.67,
         100.64,
         100.78,
         100.78,
         101.14,
-        101.47
+        101.47,
+        101.28
       ]
     },
     {
@@ -87,11 +87,11 @@
       "symbol": "US10Y",
       "unit": "",
       "suffix": "%",
-      "price": 4.427,
+      "price": 4.407,
       "prev_close": 4.492,
-      "change_pct": -1.45,
+      "change_pct": -1.89,
       "decimals": 3,
-      "asof": "13:38 UTC",
+      "asof": "16:31 UTC",
       "stale": false,
       "source": "https://www.perplexity.ai/finance/%5ETNX",
       "source_name": "Perplexity Finance \u00b7 US10Y",
@@ -103,9 +103,9 @@
       "id": "usdt",
       "label": "Tether",
       "symbol": "USDT",
-      "price": 0.9986,
-      "peg_dev_bps": -13.7,
-      "mcap_b": 186.84,
+      "price": 0.9988,
+      "peg_dev_bps": -12.0,
+      "mcap_b": 186.87,
       "source": "https://www.perplexity.ai/finance/USDTUSD",
       "source_name": "Perplexity Finance \u00b7 USDT"
     },
@@ -113,9 +113,9 @@
       "id": "usdc",
       "label": "USD Coin",
       "symbol": "USDC",
-      "price": 0.9998,
-      "peg_dev_bps": -2.3,
-      "mcap_b": 75.6,
+      "price": 0.9997,
+      "peg_dev_bps": -3.0,
+      "mcap_b": 75.59,
       "source": "https://www.perplexity.ai/finance/USDCUSD",
       "source_name": "Perplexity Finance \u00b7 USDC"
     },
@@ -123,8 +123,8 @@
       "id": "dai",
       "label": "Dai",
       "symbol": "DAI",
-      "price": 0.9999,
-      "peg_dev_bps": -1.5,
+      "price": 0.9997,
+      "peg_dev_bps": -2.8,
       "mcap_b": 4.23,
       "source": "https://www.perplexity.ai/finance/DAIUSD",
       "source_name": "Perplexity Finance \u00b7 DAI"
@@ -133,8 +133,8 @@
       "id": "frax",
       "label": "Frax",
       "symbol": "FRAX",
-      "price": 0.9891,
-      "peg_dev_bps": -109.4,
+      "price": 0.9905,
+      "peg_dev_bps": -94.7,
       "mcap_b": 0.28,
       "source": "https://www.perplexity.ai/finance/FRAXUSD",
       "source_name": "Perplexity Finance \u00b7 FRAX"
@@ -192,29 +192,29 @@
     }
   ],
   "ratio": {
-    "value": 15.47,
-    "chg_pct": 1.5,
+    "value": 15.01,
+    "chg_pct": -1.53,
     "spark": [
       15.38,
-      15.42,
-      15.41,
+      15.38,
       15.35,
       15.32,
-      15.36,
-      15.39,
+      15.34,
       15.38,
       15.38,
       15.37,
       15.53,
-      15.62,
-      15.54,
-      15.5
+      15.68,
+      15.16,
+      15.22,
+      15.03,
+      15.04
     ],
-    "lead": "BTC"
+    "lead": "Gold"
   },
-  "correlation": 0.26,
-  "fear_greed": 42,
-  "btc_vol_ann": 42.3,
+  "correlation": 0.08,
+  "fear_greed": 48,
+  "btc_vol_ann": 48.3,
   "timeline": [
     {
       "t": "00:00",
@@ -261,7 +261,7 @@
       "r": "liquidity"
     }
   ],
-  "stable_total_b": 266.95,
+  "stable_total_b": 266.97,
   "alerts": {
     "peg_break_bps": 25,
     "big_move_pct": 3.0,
@@ -416,13 +416,13 @@
   },
   "streak_hrs": 4,
   "dollar_adj": {
-    "btc": -1.74,
-    "gold": -3.21
+    "btc": -3.94,
+    "gold": -2.44
   },
   "curve": {
-    "value": 0.74,
+    "value": 0.72,
     "irx": 3.69,
-    "tnx": 4.427,
+    "tnx": 4.407,
     "label": "Steep/normal"
   },
   "crypto_fng": {
@@ -462,11 +462,11 @@
     ]
   },
   "gld": {
-    "price": 366.7,
-    "chg": -2.81,
-    "vol": 2005513,
-    "avg_vol": 7883400,
-    "flow_ratio": 0.25
+    "price": 368.79,
+    "chg": -2.26,
+    "vol": 7518287,
+    "avg_vol": 9145468,
+    "flow_ratio": 0.82
   },
   "session": "London \u2192 NY pre-open",
   "playbook": {
