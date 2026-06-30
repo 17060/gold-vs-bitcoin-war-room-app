@@ -15,7 +15,7 @@
 <link rel="apple-touch-icon" href="icon-192.png" />
 <link rel="preconnect" href="https://api.fontshare.com" />
 <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&f[]=jetbrains-mono@400,500,700&display=swap" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <style>
   :root{
     --bg:#0a0d12; --panel:#11161e; --panel-2:#161c26; --line:#222b38;
@@ -571,9 +571,10 @@ function render(d){
   }).join('');
 
   // 30d calendar (with annotation markers)
+  const escAttr=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   document.getElementById('cal').innerHTML=(d.regime_calendar||[]).map(c=>{
     const note=NOTES[c.d];
-    return '<div class="calc tl-'+c.r+'" title="'+c.d+' · '+RNAME[c.r]+(note?' · 📌 '+note:'')+'">'+(note?'<span style="position:absolute;font-size:7px;margin:-1px 0 0 1px">•</span>':'')+'</div>';
+    return '<div class="calc tl-'+c.r+'" title="'+escAttr(c.d+' · '+RNAME[c.r]+(note?' · 📌 '+note:''))+'">'+(note?'<span style="position:absolute;font-size:7px;margin:-1px 0 0 1px">•</span>':'')+'</div>';
   }).join('');
 
   // crypto F&G (real)
@@ -729,7 +730,8 @@ let _toastQ=[],_toastBusy=false;
 function toast(title,msg,kind){_toastQ.push({title,msg,kind});if(!_toastBusy)_drainToast();}
 function _drainToast(){const t=document.getElementById('toast');if(!_toastQ.length){_toastBusy=false;t.className='';return;}
   _toastBusy=true;const{title,msg,kind}=_toastQ.shift();t.className='show '+(kind||'');
-  t.innerHTML='<div class="ttitle">'+title+'</div><div>'+msg+'</div>';
+  const _e=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  t.innerHTML='<div class="ttitle">'+_e(title)+'</div><div>'+_e(msg)+'</div>';
   clearTimeout(t._h);t._h=setTimeout(()=>{t.className='';setTimeout(_drainToast,350);},3800);}
 // user-tunable alert config (session-scoped; seeded from data.alerts)
 let ALERT_CFG={peg_break_bps:25,big_move_pct:3.0,ratio_below:null};
@@ -814,7 +816,8 @@ document.getElementById('sbReset').onclick=sbReadLive;
 // ---- journal ----
 function renderNotes(){const l=document.getElementById('jList');
   const keys=Object.keys(NOTES);
-  l.innerHTML=keys.length?keys.sort().map(k=>'<div class="jnote"><span><b>'+k+'</b> '+NOTES[k]+'</span><button data-del="'+k+'">remove</button></div>').join(''):'<div style="color:var(--faint);font-size:12px">No notes yet.</div>';
+  const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  l.innerHTML=keys.length?keys.sort().map(k=>'<div class="jnote"><span><b>'+esc(k)+'</b> '+esc(NOTES[k])+'</span><button data-del="'+esc(k)+'">remove</button></div>').join(''):'<div style="color:var(--faint);font-size:12px">No notes yet.</div>';
   l.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{delete NOTES[b.dataset.del];renderNotes();if(DATA)render(DATA);});}
 document.getElementById('journalBtn').onclick=()=>{renderNotes();openModal('journalModal');};
 document.getElementById('jAdd').onclick=()=>{const d=document.getElementById('jDate').value.trim(),t=document.getElementById('jText').value.trim();
