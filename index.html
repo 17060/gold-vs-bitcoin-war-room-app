@@ -841,10 +841,18 @@ document.getElementById('alSave').onclick=()=>{
 
 // ---- load + auto-refresh ----
 let _cfgSeeded=false;
-function load(manual){fetch('data.json?t='+Date.now()).then(r=>r.json()).then(d=>{
+// Live data source: the refresh cron updates data.json in the GitHub repo (raw served with CORS).
+// Falls back to the bundled local copy if the remote is unreachable.
+var DATA_REMOTE='https://raw.githubusercontent.com/17060/gold-vs-bitcoin-war-room-app/master/data.json';
+var DATA_LOCAL='data.json';
+function _applyData(d,manual,src){
     if(!_cfgSeeded&&d.alerts){ALERT_CFG.peg_break_bps=d.alerts.peg_break_bps;ALERT_CFG.big_move_pct=d.alerts.big_move_pct;if(d.discord_webhook)DISCORD_WEBHOOK=d.discord_webhook;_cfgSeeded=true;}
-    render(d);if(manual)toast('Refreshed','Latest snapshot loaded','ok');})
-  .catch(e=>{document.getElementById('vname').textContent='Data load error';console.error(e);});}
+    render(d);if(manual)toast('Refreshed',(src==='remote'?'Latest data from GitHub':'Latest local snapshot')+' loaded','ok');}
+function load(manual){
+  fetch(DATA_REMOTE+'?t='+Date.now(),{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('remote '+r.status);return r.json();})
+    .then(d=>_applyData(d,manual,'remote'))
+    .catch(()=>fetch(DATA_LOCAL+'?t='+Date.now(),{cache:'no-store'}).then(r=>r.json()).then(d=>_applyData(d,manual,'local'))
+      .catch(e=>{document.getElementById('vname').textContent='Data load error';console.error(e);}));}
 load();setInterval(load,120000);
 </script>
 </body>
