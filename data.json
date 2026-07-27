@@ -1,6 +1,6 @@
 {
-  "as_of_utc": "2026-07-27 14:06 UTC",
-  "as_of_local": "Jul 27, 2026 \u00b7 10:06 AM EDT",
+  "as_of_utc": "2026-07-27 15:04 UTC",
+  "as_of_local": "Jul 27, 2026 \u00b7 11:04 AM EDT",
   "_regime_note": "Regime is computed live in-page by classifyRegime(). To pin a manual override, add a 'regime' object with pinned:true, label, code, tagline, and score.",
   "assets": [
     {
@@ -8,27 +8,27 @@
       "label": "Bitcoin",
       "symbol": "BTC",
       "unit": "$",
-      "price": 65099.8,
+      "price": 64591.35,
       "prev_close": 65333.12,
-      "change_pct": -0.36,
+      "change_pct": -1.14,
       "decimals": 0,
-      "asof": "14:06 UTC",
+      "asof": "15:04 UTC",
       "source": "https://www.perplexity.ai/finance/BTCUSD",
       "source_name": "Perplexity Finance \u00b7 BTCUSD",
       "spark": [
         65271.41,
         65348.83,
-        65411.03,
+        65435.77,
         65357.99,
         65165.11,
-        65179.51,
+        65104.49,
         65163.94,
         65290.5,
-        65277.99,
-        65040.33,
-        65021.0,
+        65073.86,
+        64953.54,
         64901.44,
-        65212.0
+        65150.73,
+        64574.63
       ]
     },
     {
@@ -36,27 +36,27 @@
       "label": "Gold",
       "symbol": "XAU/USD",
       "unit": "$",
-      "price": 4074.82,
+      "price": 4073.41,
       "prev_close": 4052.84,
-      "change_pct": 0.54,
+      "change_pct": 0.51,
       "decimals": 2,
-      "asof": "14:06 UTC",
+      "asof": "15:04 UTC",
       "source": "https://www.perplexity.ai/finance/XAUUSD",
       "source_name": "Perplexity Finance \u00b7 XAU/USD",
       "spark": [
         4089.07,
         4087.15,
-        4092.72,
+        4096.21,
         4096.22,
         4089.63,
-        4090.93,
+        4095.59,
         4091.68,
         4093.09,
-        4099.65,
-        4094.09,
-        4084.22,
+        4101.3,
+        4086.73,
         4076.54,
-        4076.34
+        4074.32,
+        4074.53
       ]
     },
     {
@@ -64,11 +64,11 @@
       "label": "Dollar Index",
       "symbol": "DXY",
       "unit": "",
-      "price": 101.28,
+      "price": 101.33,
       "prev_close": 101.47,
-      "change_pct": -0.19,
+      "change_pct": -0.14,
       "decimals": 2,
-      "asof": "14:06 UTC",
+      "asof": "15:04 UTC",
       "source": "https://www.perplexity.ai/finance/DX-Y.NYB",
       "source_name": "Perplexity Finance \u00b7 DXY",
       "spark": [
@@ -87,11 +87,11 @@
       "symbol": "US10Y",
       "unit": "",
       "suffix": "%",
-      "price": 4.654,
+      "price": 4.66,
       "prev_close": 4.678,
-      "change_pct": -0.51,
+      "change_pct": -0.38,
       "decimals": 3,
-      "asof": "14:06 UTC",
+      "asof": "15:04 UTC",
       "stale": false,
       "source": "https://www.perplexity.ai/finance/%5ETNX",
       "source_name": "Perplexity Finance \u00b7 US10Y",
@@ -104,8 +104,8 @@
       "label": "Tether",
       "symbol": "USDT",
       "price": 0.999,
-      "peg_dev_bps": -9.6,
-      "mcap_b": 186.91,
+      "peg_dev_bps": -10.3,
+      "mcap_b": 186.9,
       "source": "https://www.perplexity.ai/finance/USDTUSD",
       "source_name": "Perplexity Finance \u00b7 USDT"
     },
@@ -113,9 +113,9 @@
       "id": "usdc",
       "label": "USD Coin",
       "symbol": "USDC",
-      "price": 0.9998,
-      "peg_dev_bps": -2.0,
-      "mcap_b": 75.6,
+      "price": 0.9999,
+      "peg_dev_bps": -1.0,
+      "mcap_b": 75.61,
       "source": "https://www.perplexity.ai/finance/USDCUSD",
       "source_name": "Perplexity Finance \u00b7 USDC"
     },
@@ -124,7 +124,7 @@
       "label": "Dai",
       "symbol": "DAI",
       "price": 1.0,
-      "peg_dev_bps": -0.1,
+      "peg_dev_bps": -0.5,
       "mcap_b": 4.23,
       "source": "https://www.perplexity.ai/finance/DAIUSD",
       "source_name": "Perplexity Finance \u00b7 DAI"
@@ -133,8 +133,8 @@
       "id": "frax",
       "label": "Frax",
       "symbol": "FRAX",
-      "price": 0.9928,
-      "peg_dev_bps": -71.7,
+      "price": 0.9917,
+      "peg_dev_bps": -83.0,
       "mcap_b": 0.28,
       "source": "https://www.perplexity.ai/finance/FRAXUSD",
       "source_name": "Perplexity Finance \u00b7 FRAX"
@@ -192,8 +192,8 @@
     }
   ],
   "ratio": {
-    "value": 15.98,
-    "chg_pct": -0.89,
+    "value": 15.86,
+    "chg_pct": -1.63,
     "spark": [
       15.96,
       15.99,
@@ -201,21 +201,21 @@
       15.96,
       15.93,
       15.93,
-      15.9,
+      15.93,
       15.92,
-      15.95,
-      15.87,
+      15.92,
+      15.89,
       15.89,
       15.92,
-      15.92,
-      16.0
+      15.99,
+      15.85
     ],
     "lead": "Gold",
-    "asof": "14:06 UTC"
+    "asof": "15:04 UTC"
   },
-  "correlation": 0.49,
-  "fear_greed": 36.0,
-  "btc_vol_ann": 35.6,
+  "correlation": 0.46,
+  "fear_greed": 34.0,
+  "btc_vol_ann": 33.8,
   "timeline": [
     {
       "t": "00:00",
@@ -418,13 +418,13 @@
   },
   "streak_hrs": 4,
   "dollar_adj": {
-    "btc": -0.17,
-    "gold": 0.73
+    "btc": -1.0,
+    "gold": 0.65
   },
   "curve": {
     "value": 0.84,
-    "irx": 3.81,
-    "tnx": 4.654,
+    "irx": 3.82,
+    "tnx": 4.66,
     "label": "Steep/normal"
   },
   "crypto_fng": {
@@ -432,163 +432,163 @@
     "label": "Fear",
     "spark": [
       {
-        "value": 18,
         "label": "Extreme Fear",
-        "ts": 1782604800
+        "ts": 1782604800,
+        "value": 18
       },
       {
-        "value": 12,
         "label": "Extreme Fear",
-        "ts": 1782691200
+        "ts": 1782691200,
+        "value": 12
       },
       {
-        "value": 15,
         "label": "Extreme Fear",
-        "ts": 1782777600
+        "ts": 1782777600,
+        "value": 15
       },
       {
-        "value": 11,
         "label": "Extreme Fear",
-        "ts": 1782864000
+        "ts": 1782864000,
+        "value": 11
       },
       {
-        "value": 19,
         "label": "Extreme Fear",
-        "ts": 1782950400
+        "ts": 1782950400,
+        "value": 19
       },
       {
-        "value": 21,
         "label": "Extreme Fear",
-        "ts": 1783036800
+        "ts": 1783036800,
+        "value": 21
       },
       {
-        "value": 22,
         "label": "Extreme Fear",
-        "ts": 1783123200
+        "ts": 1783123200,
+        "value": 22
       },
       {
-        "value": 23,
         "label": "Extreme Fear",
-        "ts": 1783209600
+        "ts": 1783209600,
+        "value": 23
       },
       {
-        "value": 24,
         "label": "Extreme Fear",
-        "ts": 1783296000
+        "ts": 1783296000,
+        "value": 24
       },
       {
-        "value": 27,
         "label": "Fear",
-        "ts": 1783382400
+        "ts": 1783382400,
+        "value": 27
       },
       {
-        "value": 20,
         "label": "Extreme Fear",
-        "ts": 1783468800
+        "ts": 1783468800,
+        "value": 20
       },
       {
-        "value": 22,
         "label": "Extreme Fear",
-        "ts": 1783555200
+        "ts": 1783555200,
+        "value": 22
       },
       {
-        "value": 23,
         "label": "Extreme Fear",
-        "ts": 1783641600
+        "ts": 1783641600,
+        "value": 23
       },
       {
-        "value": 26,
         "label": "Fear",
-        "ts": 1783728000
+        "ts": 1783728000,
+        "value": 26
       },
       {
-        "value": 26,
         "label": "Fear",
-        "ts": 1783814400
+        "ts": 1783814400,
+        "value": 26
       },
       {
-        "value": 28,
         "label": "Fear",
-        "ts": 1783900800
+        "ts": 1783900800,
+        "value": 28
       },
       {
-        "value": 22,
         "label": "Extreme Fear",
-        "ts": 1783987200
+        "ts": 1783987200,
+        "value": 22
       },
       {
-        "value": 25,
         "label": "Extreme Fear",
-        "ts": 1784073600
+        "ts": 1784073600,
+        "value": 25
       },
       {
-        "value": 25,
         "label": "Extreme Fear",
-        "ts": 1784160000
+        "ts": 1784160000,
+        "value": 25
       },
       {
-        "value": 27,
         "label": "Fear",
-        "ts": 1784246400
+        "ts": 1784246400,
+        "value": 27
       },
       {
-        "value": 25,
         "label": "Extreme Fear",
-        "ts": 1784332800
+        "ts": 1784332800,
+        "value": 25
       },
       {
-        "value": 28,
         "label": "Fear",
-        "ts": 1784419200
+        "ts": 1784419200,
+        "value": 28
       },
       {
-        "value": 29,
         "label": "Fear",
-        "ts": 1784505600
+        "ts": 1784505600,
+        "value": 29
       },
       {
-        "value": 25,
         "label": "Extreme Fear",
-        "ts": 1784592000
+        "ts": 1784592000,
+        "value": 25
       },
       {
-        "value": 33,
         "label": "Fear",
-        "ts": 1784678400
+        "ts": 1784678400,
+        "value": 33
       },
       {
-        "value": 31,
         "label": "Fear",
-        "ts": 1784764800
+        "ts": 1784764800,
+        "value": 31
       },
       {
-        "value": 28,
         "label": "Fear",
-        "ts": 1784851200
+        "ts": 1784851200,
+        "value": 28
       },
       {
-        "value": 27,
         "label": "Fear",
-        "ts": 1784937600
+        "ts": 1784937600,
+        "value": 27
       },
       {
-        "value": 26,
         "label": "Fear",
-        "ts": 1785024000
+        "ts": 1785024000,
+        "value": 26
       },
       {
-        "value": 30,
         "label": "Fear",
-        "ts": 1785110400
+        "ts": 1785110400,
+        "value": 30
       }
     ]
   },
   "gld": {
-    "price": 373.84,
-    "chg": 0.52,
-    "vol": 685141,
-    "avg_vol": 6972786,
-    "flow_ratio": 0.1
+    "price": 373.64,
+    "chg": 0.47,
+    "vol": 1123276.0,
+    "avg_vol": 6972786.0,
+    "flow_ratio": 0.16
   },
   "session": "London \u2192 NY pre-open",
   "playbook": {
