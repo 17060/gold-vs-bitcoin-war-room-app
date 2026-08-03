@@ -1,6 +1,6 @@
 {
-  "as_of_utc": "2026-07-31 20:03 UTC",
-  "as_of_local": "Jul 31, 2026 \u00b7 4:03 PM EDT",
+  "as_of_utc": "2026-08-03 13:02 UTC",
+  "as_of_local": "Aug 03, 2026 \u00b7 9:02 AM EDT",
   "_regime_note": "Regime is computed live in-page by classifyRegime(). To pin a manual override, add a 'regime' object with pinned:true, label, code, tagline, and score.",
   "assets": [
     {
@@ -8,11 +8,11 @@
       "label": "Bitcoin",
       "symbol": "BTC",
       "unit": "$",
-      "price": 62926.31,
-      "prev_close": 64724.03,
-      "change_pct": -2.78,
+      "price": 62652.81,
+      "prev_close": 63497.25,
+      "change_pct": -1.33,
       "decimals": 0,
-      "asof": "20:03 UTC",
+      "asof": "13:02 UTC",
       "source": "https://www.perplexity.ai/finance/BTCUSD",
       "source_name": "Perplexity Finance \u00b7 BTCUSD",
       "spark": [
@@ -36,11 +36,11 @@
       "label": "Gold",
       "symbol": "XAU/USD",
       "unit": "$",
-      "price": 4048.92,
-      "prev_close": 4103.27,
-      "change_pct": -1.32,
+      "price": 4044.78,
+      "prev_close": 4045.16,
+      "change_pct": -0.01,
       "decimals": 2,
-      "asof": "20:03 UTC",
+      "asof": "13:02 UTC",
       "source": "https://www.perplexity.ai/finance/XAUUSD",
       "source_name": "Perplexity Finance \u00b7 XAU/USD",
       "spark": [
@@ -64,11 +64,11 @@
       "label": "Dollar Index",
       "symbol": "DXY",
       "unit": "",
-      "price": 99.83,
-      "prev_close": 99.86,
-      "change_pct": -0.03,
+      "price": 99.66,
+      "prev_close": 99.91,
+      "change_pct": -0.25,
       "decimals": 2,
-      "asof": "20:03 UTC",
+      "asof": "13:02 UTC",
       "source": "https://www.perplexity.ai/finance/DX-Y.NYB",
       "source_name": "Perplexity Finance \u00b7 DXY",
       "spark": [
@@ -87,11 +87,11 @@
       "symbol": "US10Y",
       "unit": "",
       "suffix": "%",
-      "price": 4.74,
-      "prev_close": 4.66,
-      "change_pct": 1.72,
+      "price": 4.68,
+      "prev_close": 4.74,
+      "change_pct": -1.27,
       "decimals": 3,
-      "asof": "20:03 UTC",
+      "asof": "13:02 UTC",
       "stale": false,
       "source": "https://www.perplexity.ai/finance/%5ETNX",
       "source_name": "Perplexity Finance \u00b7 US10Y",
@@ -105,7 +105,7 @@
       "symbol": "USDT",
       "price": 1.0,
       "peg_dev_bps": 0.0,
-      "mcap_b": 186.89,
+      "mcap_b": 186.84,
       "source": "https://www.perplexity.ai/finance/USDTUSD",
       "source_name": "Perplexity Finance \u00b7 USDT"
     },
@@ -115,7 +115,7 @@
       "symbol": "USDC",
       "price": 1.0,
       "peg_dev_bps": 0.0,
-      "mcap_b": 75.59,
+      "mcap_b": 75.6,
       "source": "https://www.perplexity.ai/finance/USDCUSD",
       "source_name": "Perplexity Finance \u00b7 USDC"
     },
@@ -192,8 +192,8 @@
     }
   ],
   "ratio": {
-    "value": 15.54,
-    "chg_pct": -1.47,
+    "value": 15.49,
+    "chg_pct": -1.32,
     "spark": [
       15.9,
       16.07,
@@ -211,7 +211,7 @@
       16.04
     ],
     "lead": "Gold",
-    "asof": "20:03 UTC"
+    "asof": "13:02 UTC"
   },
   "correlation": 0.43,
   "fear_greed": 24.0,
@@ -262,7 +262,7 @@
       "r": "liquidity"
     }
   ],
-  "stable_total_b": 266.99,
+  "stable_total_b": 266.95,
   "alerts": {
     "peg_break_bps": 25,
     "big_move_pct": 3.0,
@@ -418,22 +418,19 @@
   },
   "streak_hrs": 4,
   "dollar_adj": {
-    "btc": -2.75,
-    "gold": -1.29
+    "btc": -1.08,
+    "gold": 0.24
   },
   "curve": {
-    "value": 1.05,
+    "value": 0.99,
     "irx": 3.69,
-    "tnx": 4.74,
+    "tnx": 4.68,
     "label": "Steep/normal"
   },
   "crypto_fng": {
-    "value": 25,
-    "label": "Extreme Fear",
+    "value": 28,
+    "label": "Fear",
     "spark": [
-      19,
-      21,
-      22,
       23,
       24,
       27,
@@ -460,15 +457,18 @@
       29,
       29,
       28,
-      25
+      25,
+      27,
+      27,
+      28
     ]
   },
   "gld": {
     "price": 371.54,
     "chg": -1.49,
-    "vol": 5829520,
-    "avg_vol": 6947672,
-    "flow_ratio": 0.84
+    "vol": 6594919.0,
+    "avg_vol": 6959698.0,
+    "flow_ratio": 0.95
   },
   "session": "London \u2192 NY pre-open",
   "playbook": {
