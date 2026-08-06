@@ -1,6 +1,6 @@
 {
-  "as_of_utc": "2026-08-05 20:01 UTC",
-  "as_of_local": "Aug 05, 2026 \u00b7 4:01 PM EDT",
+  "as_of_utc": "2026-08-06 13:06 UTC",
+  "as_of_local": "Aug 06, 2026 \u00b7 9:06 AM EDT",
   "_regime_note": "Regime is computed live in-page by classifyRegime(). To pin a manual override, add a 'regime' object with pinned:true, label, code, tagline, and score.",
   "assets": [
     {
@@ -8,27 +8,27 @@
       "label": "Bitcoin",
       "symbol": "BTC",
       "unit": "$",
-      "price": 64798.09,
-      "prev_close": 64052.56,
-      "change_pct": 1.16,
+      "price": 64260.85,
+      "prev_close": 64602.32,
+      "change_pct": -0.53,
       "decimals": 0,
-      "asof": "20:01 UTC",
+      "asof": "13:06 UTC",
       "source": "https://www.perplexity.ai/finance/BTCUSD",
       "source_name": "Perplexity Finance \u00b7 BTCUSD",
       "spark": [
-        63775.29,
-        63617.41,
-        63694.14,
-        63823.86,
-        64113.15,
-        64126.57,
-        64014.63,
-        64014.06,
-        64199.3,
-        64097.27,
-        64086.92,
-        64697.9,
-        64849.53
+        64637.98,
+        64832.74,
+        64841.48,
+        64764.09,
+        64830.44,
+        64838.89,
+        64873.6,
+        64667.27,
+        64613.31,
+        64508.55,
+        64551.32,
+        64473.63,
+        64322.61
       ]
     },
     {
@@ -36,27 +36,27 @@
       "label": "Gold",
       "symbol": "XAU/USD",
       "unit": "$",
-      "price": 4249.27,
-      "prev_close": 4077.05,
-      "change_pct": 4.22,
+      "price": 4248.15,
+      "prev_close": 4247.27,
+      "change_pct": 0.02,
       "decimals": 2,
-      "asof": "20:01 UTC",
+      "asof": "13:06 UTC",
       "source": "https://www.perplexity.ai/finance/XAUUSD",
       "source_name": "Perplexity Finance \u00b7 XAU/USD",
       "spark": [
-        4061.52,
-        4063.01,
-        4053.99,
-        4083.95,
-        4094.8,
-        4075.62,
-        4078.66,
-        4128.33,
-        4177.89,
-        4157.05,
-        4197.44,
-        4242.11,
-        4247.15
+        4255.12,
+        4255.28,
+        4267.21,
+        4257.66,
+        4262.35,
+        4268.09,
+        4278.25,
+        4282.48,
+        4269.26,
+        4264.07,
+        4262.52,
+        4260.94,
+        4252.66
       ]
     },
     {
@@ -64,11 +64,11 @@
       "label": "Dollar Index",
       "symbol": "DXY",
       "unit": "",
-      "price": 99.56,
-      "prev_close": 99.86,
-      "change_pct": -0.3,
+      "price": 99.66,
+      "prev_close": 99.68,
+      "change_pct": -0.02,
       "decimals": 2,
-      "asof": "20:01 UTC",
+      "asof": "13:06 UTC",
       "source": "https://www.perplexity.ai/finance/DX-Y.NYB",
       "source_name": "Perplexity Finance \u00b7 DXY",
       "spark": [
@@ -87,11 +87,11 @@
       "symbol": "US10Y",
       "unit": "",
       "suffix": "%",
-      "price": 4.616,
-      "prev_close": 4.627,
-      "change_pct": -0.24,
+      "price": 4.644,
+      "prev_close": 4.616,
+      "change_pct": 0.61,
       "decimals": 3,
-      "asof": "20:01 UTC",
+      "asof": "13:06 UTC",
       "stale": false,
       "source": "https://www.perplexity.ai/finance/%5ETNX",
       "source_name": "Perplexity Finance \u00b7 US10Y",
@@ -103,9 +103,9 @@
       "id": "usdt",
       "label": "Tether",
       "symbol": "USDT",
-      "price": 0.9991,
-      "peg_dev_bps": -9.0,
-      "mcap_b": 186.93,
+      "price": 0.9988,
+      "peg_dev_bps": -11.7,
+      "mcap_b": 186.88,
       "source": "https://www.perplexity.ai/finance/USDTUSD",
       "source_name": "Perplexity Finance \u00b7 USDT"
     },
@@ -123,8 +123,8 @@
       "id": "dai",
       "label": "Dai",
       "symbol": "DAI",
-      "price": 1.0,
-      "peg_dev_bps": -0.3,
+      "price": 0.9996,
+      "peg_dev_bps": -3.7,
       "mcap_b": 4.23,
       "source": "https://www.perplexity.ai/finance/DAIUSD",
       "source_name": "Perplexity Finance \u00b7 DAI"
@@ -133,8 +133,8 @@
       "id": "frax",
       "label": "Frax",
       "symbol": "FRAX",
-      "price": 0.991,
-      "peg_dev_bps": -89.5,
+      "price": 0.9907,
+      "peg_dev_bps": -93.5,
       "mcap_b": 0.28,
       "source": "https://www.perplexity.ai/finance/FRAXUSD",
       "source_name": "Perplexity Finance \u00b7 FRAX"
@@ -192,30 +192,30 @@
     }
   ],
   "ratio": {
-    "value": 15.25,
-    "chg_pct": -2.94,
+    "value": 15.13,
+    "chg_pct": -0.55,
     "spark": [
-      15.7,
-      15.65,
-      15.66,
-      15.65,
-      15.65,
-      15.74,
-      15.79,
-      15.59,
-      15.51,
-      15.39,
-      15.4,
-      15.28,
-      15.16,
-      15.24
+      15.19,
+      15.17,
+      15.2,
+      15.21,
+      15.21,
+      15.19,
+      15.19,
+      15.1,
+      15.12,
+      15.13,
+      15.13,
+      15.14,
+      15.14,
+      15.13
     ],
     "lead": "Gold",
-    "asof": "20:01 UTC"
+    "asof": "13:06 UTC"
   },
-  "correlation": 0.14,
-  "fear_greed": 32.0,
-  "btc_vol_ann": 31.6,
+  "correlation": 0.13,
+  "fear_greed": 27.0,
+  "btc_vol_ann": 27.3,
   "timeline": [
     {
       "t": "00:00",
@@ -262,7 +262,7 @@
       "r": "liquidity"
     }
   ],
-  "stable_total_b": 267.04,
+  "stable_total_b": 266.99,
   "alerts": {
     "peg_break_bps": 25,
     "big_move_pct": 3.0,
@@ -418,20 +418,19 @@
   },
   "streak_hrs": 4,
   "dollar_adj": {
-    "btc": 1.46,
-    "gold": 4.52
+    "btc": -0.51,
+    "gold": 0.04
   },
   "curve": {
-    "value": 0.89,
+    "value": 0.92,
     "irx": 3.73,
-    "tnx": 4.616,
+    "tnx": 4.644,
     "label": "Steep/normal"
   },
   "crypto_fng": {
-    "value": 27,
-    "label": "Fear",
+    "value": 25,
+    "label": "Extreme Fear",
     "spark": [
-      27,
       20,
       22,
       23,
@@ -460,15 +459,16 @@
       27,
       28,
       25,
-      27
+      27,
+      25
     ]
   },
   "gld": {
-    "price": 389.59,
-    "chg": 4.12,
-    "vol": 13829082.0,
-    "avg_vol": 6968504.0,
-    "flow_ratio": 1.98
+    "price": 389.64,
+    "chg": 4.14,
+    "vol": 14717153.0,
+    "avg_vol": 6967920.0,
+    "flow_ratio": 2.11
   },
   "session": "London \u2192 NY pre-open",
   "playbook": {
