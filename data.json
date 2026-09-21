@@ -1,6 +1,6 @@
 {
-  "as_of_utc": "2026-09-21 14:16 UTC",
-  "as_of_local": "Sep 21, 2026 \u00b7 10:16 AM EDT",
+  "as_of_utc": "2026-09-21 15:07 UTC",
+  "as_of_local": "Sep 21, 2026 \u00b7 11:07 AM EDT",
   "_regime_note": "Regime is computed live in-page by classifyRegime(). To pin a manual override, add a 'regime' object with pinned:true, label, code, tagline, and score.",
   "assets": [
     {
@@ -8,11 +8,11 @@
       "label": "Bitcoin",
       "symbol": "BTC",
       "unit": "$",
-      "price": 85282.86,
+      "price": 86036.49,
       "prev_close": 81162.18,
-      "change_pct": 5.08,
+      "change_pct": 6.01,
       "decimals": 0,
-      "asof": "14:16 UTC",
+      "asof": "15:07 UTC",
       "source": "https://www.perplexity.ai/finance/BTCUSD",
       "source_name": "Perplexity Finance \u00b7 BTCUSD",
       "spark": [
@@ -36,11 +36,11 @@
       "label": "Gold",
       "symbol": "XAU/USD",
       "unit": "$",
-      "price": 4341.06,
+      "price": 4347.62,
       "prev_close": 4378.39,
-      "change_pct": -0.85,
+      "change_pct": -0.7,
       "decimals": 2,
-      "asof": "14:16 UTC",
+      "asof": "15:07 UTC",
       "source": "https://www.perplexity.ai/finance/XAUUSD",
       "source_name": "Perplexity Finance \u00b7 XAU/USD",
       "spark": [
@@ -64,11 +64,11 @@
       "label": "Dollar Index",
       "symbol": "DXY",
       "unit": "",
-      "price": 100.1,
+      "price": 100.08,
       "prev_close": 100.22,
-      "change_pct": -0.12,
+      "change_pct": -0.14,
       "decimals": 2,
-      "asof": "14:16 UTC",
+      "asof": "15:07 UTC",
       "source": "https://www.perplexity.ai/finance/DX-Y.NYB",
       "source_name": "Perplexity Finance \u00b7 DXY",
       "spark": [
@@ -91,7 +91,7 @@
       "prev_close": 4.997,
       "change_pct": -0.66,
       "decimals": 3,
-      "asof": "14:16 UTC",
+      "asof": "15:07 UTC",
       "stale": false,
       "source": "https://www.perplexity.ai/finance/%5ETNX",
       "source_name": "Perplexity Finance \u00b7 US10Y",
@@ -103,9 +103,9 @@
       "id": "usdt",
       "label": "Tether",
       "symbol": "USDT",
-      "price": 0.9997,
-      "peg_dev_bps": -3.5,
-      "mcap_b": 187.03,
+      "price": 0.9996,
+      "peg_dev_bps": -4.1,
+      "mcap_b": 187.02,
       "source": "https://www.perplexity.ai/finance/USDTUSD",
       "source_name": "Perplexity Finance \u00b7 USDT"
     },
@@ -123,8 +123,8 @@
       "id": "dai",
       "label": "Dai",
       "symbol": "DAI",
-      "price": 1.0,
-      "peg_dev_bps": -0.4,
+      "price": 0.9997,
+      "peg_dev_bps": -3.0,
       "mcap_b": 4.23,
       "source": "https://www.perplexity.ai/finance/DAIUSD",
       "source_name": "Perplexity Finance \u00b7 DAI"
@@ -133,8 +133,8 @@
       "id": "frax",
       "label": "Frax",
       "symbol": "FRAX",
-      "price": 0.9913,
-      "peg_dev_bps": -86.5,
+      "price": 0.9916,
+      "peg_dev_bps": -84.2,
       "mcap_b": 0.28,
       "source": "https://www.perplexity.ai/finance/FRAXUSD",
       "source_name": "Perplexity Finance \u00b7 FRAX"
@@ -192,8 +192,8 @@
     }
   ],
   "ratio": {
-    "value": 19.65,
-    "chg_pct": 5.98,
+    "value": 19.79,
+    "chg_pct": 6.76,
     "spark": [
       17.71,
       17.76,
@@ -211,7 +211,7 @@
       18.55
     ],
     "lead": "BTC",
-    "asof": "14:16 UTC"
+    "asof": "15:07 UTC"
   },
   "correlation": 0.07,
   "fear_greed": 40.0,
@@ -262,7 +262,7 @@
       "r": "liquidity"
     }
   ],
-  "stable_total_b": 267.14,
+  "stable_total_b": 267.13,
   "alerts": {
     "peg_break_bps": 25,
     "big_move_pct": 3.0,
@@ -418,12 +418,12 @@
   },
   "streak_hrs": 4,
   "dollar_adj": {
-    "btc": 5.2,
-    "gold": -0.73
+    "btc": 6.15,
+    "gold": -0.56
   },
   "curve": {
     "value": 0.98,
-    "irx": 3.98,
+    "irx": 3.99,
     "tnx": 4.964,
     "label": "Steep/normal"
   },
@@ -464,11 +464,11 @@
     ]
   },
   "gld": {
-    "price": 397.93,
-    "chg": -0.81,
-    "vol": 1692712.0,
+    "price": 398.62,
+    "chg": -0.64,
+    "vol": 2600295.0,
     "avg_vol": 9121742.0,
-    "flow_ratio": 0.19
+    "flow_ratio": 0.29
   },
   "session": "London \u2192 NY pre-open",
   "playbook": {
