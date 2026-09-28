@@ -1,6 +1,6 @@
 {
-  "as_of_utc": "2026-09-28 19:03 UTC",
-  "as_of_local": "Sep 28, 2026 \u00b7 3:03 PM EDT",
+  "as_of_utc": "2026-09-28 20:00 UTC",
+  "as_of_local": "Sep 28, 2026 \u00b7 4:00 PM EDT",
   "_regime_note": "Regime is computed live in-page by classifyRegime(). To pin a manual override, add a 'regime' object with pinned:true, label, code, tagline, and score.",
   "assets": [
     {
@@ -8,11 +8,11 @@
       "label": "Bitcoin",
       "symbol": "BTC",
       "unit": "$",
-      "price": 83841.44,
+      "price": 83387.27,
       "prev_close": 84457.3,
-      "change_pct": -0.73,
+      "change_pct": -1.27,
       "decimals": 0,
-      "asof": "19:03 UTC",
+      "asof": "20:00 UTC",
       "source": "https://www.perplexity.ai/finance/BTCUSD",
       "source_name": "Perplexity Finance \u00b7 BTCUSD",
       "spark": [
@@ -36,11 +36,11 @@
       "label": "Gold",
       "symbol": "XAU/USD",
       "unit": "$",
-      "price": 4132.86,
+      "price": 4122.69,
       "prev_close": 4284.97,
-      "change_pct": -3.55,
+      "change_pct": -3.79,
       "decimals": 2,
-      "asof": "19:03 UTC",
+      "asof": "20:00 UTC",
       "source": "https://www.perplexity.ai/finance/XAUUSD",
       "source_name": "Perplexity Finance \u00b7 XAU/USD",
       "spark": [
@@ -64,11 +64,11 @@
       "label": "Dollar Index",
       "symbol": "DXY",
       "unit": "",
-      "price": 100.95,
+      "price": 100.96,
       "prev_close": 100.97,
-      "change_pct": -0.02,
+      "change_pct": -0.01,
       "decimals": 2,
-      "asof": "19:03 UTC",
+      "asof": "20:00 UTC",
       "source": "https://www.perplexity.ai/finance/DX-Y.NYB",
       "source_name": "Perplexity Finance \u00b7 DXY",
       "spark": [
@@ -91,7 +91,7 @@
       "prev_close": 5.183,
       "change_pct": 1.12,
       "decimals": 3,
-      "asof": "19:03 UTC",
+      "asof": "20:00 UTC",
       "stale": false,
       "source": "https://www.perplexity.ai/finance/%5ETNX",
       "source_name": "Perplexity Finance \u00b7 US10Y",
@@ -103,9 +103,9 @@
       "id": "usdt",
       "label": "Tether",
       "symbol": "USDT",
-      "price": 0.9996,
-      "peg_dev_bps": -4.0,
-      "mcap_b": 187.02,
+      "price": 0.9995,
+      "peg_dev_bps": -5.3,
+      "mcap_b": 187.0,
       "source": "https://www.perplexity.ai/finance/USDTUSD",
       "source_name": "Perplexity Finance \u00b7 USDT"
     },
@@ -123,8 +123,8 @@
       "id": "dai",
       "label": "Dai",
       "symbol": "DAI",
-      "price": 1.0,
-      "peg_dev_bps": 0.0,
+      "price": 0.9997,
+      "peg_dev_bps": -3.5,
       "mcap_b": 4.23,
       "source": "https://www.perplexity.ai/finance/DAIUSD",
       "source_name": "Perplexity Finance \u00b7 DAI"
@@ -133,8 +133,8 @@
       "id": "frax",
       "label": "Frax",
       "symbol": "FRAX",
-      "price": 0.9927,
-      "peg_dev_bps": -73.3,
+      "price": 0.9925,
+      "peg_dev_bps": -75.3,
       "mcap_b": 0.28,
       "source": "https://www.perplexity.ai/finance/FRAXUSD",
       "source_name": "Perplexity Finance \u00b7 FRAX"
@@ -192,8 +192,8 @@
     }
   ],
   "ratio": {
-    "value": 20.29,
-    "chg_pct": 2.92,
+    "value": 20.23,
+    "chg_pct": 2.62,
     "spark": [
       19.87,
       19.82,
@@ -211,7 +211,7 @@
       20.28
     ],
     "lead": "BTC",
-    "asof": "19:03 UTC"
+    "asof": "20:00 UTC"
   },
   "correlation": 0.36,
   "fear_greed": 36.0,
@@ -262,7 +262,7 @@
       "r": "liquidity"
     }
   ],
-  "stable_total_b": 267.14,
+  "stable_total_b": 267.12,
   "alerts": {
     "peg_break_bps": 25,
     "big_move_pct": 3.0,
@@ -418,8 +418,8 @@
   },
   "streak_hrs": 4,
   "dollar_adj": {
-    "btc": -0.71,
-    "gold": -3.53
+    "btc": -1.26,
+    "gold": -3.78
   },
   "curve": {
     "value": 1.18,
@@ -464,11 +464,11 @@
     ]
   },
   "gld": {
-    "price": 378.88,
-    "chg": -3.69,
-    "vol": 11260438.0,
-    "avg_vol": 8997765.0,
-    "flow_ratio": 1.25
+    "price": 377.92,
+    "chg": -3.94,
+    "vol": 13887444,
+    "avg_vol": 8997765,
+    "flow_ratio": 1.54
   },
   "session": "London \u2192 NY pre-open",
   "playbook": {
